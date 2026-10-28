@@ -1,0 +1,1054 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>2026 관동체육축제</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* 밝은 테마 고정(사용자 요청). Layout: 파란 계열 · 운동장 트랙 라인을 모티프로 한 상단 띠 + 탭 5개, 학년 색(배치도의 노랑·보라·파랑)을 전 화면에 일관 적용 */
+:root{
+  color-scheme:light;
+  /* 내용 부분: 블루라이트 차단 느낌의 따뜻한 미색 */
+  --bg:#f8f0dc; --surface:#fffaee; --fg:#2b2419; --muted:#6b5f4c; --line:#e7dcc2;
+  --field:#1747a6; --field-ink:#ffffff; --track:#1f6fd1; --lane:#7cc0ff;
+  --g1:#e9b82c; --g1-soft:#fbf1d2; --g2:#9a6fc8; --g2-soft:#efe5f8; --g3:#3f7fc4; --g3-soft:#e1ecf8;
+  --gold:#c99a12; --silver:#8b98a3; --bronze:#b06b3a;
+  --good:#1f8a4c; --warn:#b7791f;
+  --f-display:"Black Han Sans","IBM Plex Sans KR",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.6}
+img{max-width:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--field)}
+.wrap{max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+header.hero{background:var(--field);color:var(--field-ink);position:relative;overflow:hidden}
+header.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:10px;
+  background:repeating-linear-gradient(90deg,var(--lane) 0 40px,#ffffff55 40px 42px)}
+.hero .wrap{padding-block:22px 30px;display:flex;flex-wrap:wrap;gap:14px 24px;align-items:flex-end;justify-content:space-between}
+.hero .eyebrow{font-size:13px;letter-spacing:.08em;opacity:.85}
+.hero h1{font-family:var(--f-display);font-weight:400;font-size:clamp(30px,7vw,48px);line-height:1.1;margin:4px 0 6px;text-wrap:balance}
+.hero .meta{font-size:14px;opacity:.92}
+.dday{background:#ffffff1f;border:1px solid #ffffff40;border-radius:10px;padding:10px 16px;text-align:right;min-width:0}
+.dday b{font-family:var(--f-display);font-weight:400;font-size:30px;display:block;line-height:1.1}
+.dday span{font-size:13px;opacity:.9}
+
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-block:10px}
+nav.tabs a{--tc:var(--track);flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;padding:7px 15px;border-radius:999px;
+  color:color-mix(in srgb,var(--tc) 82%,#000);background:color-mix(in srgb,var(--tc) 9%,#fff);border:1px solid color-mix(in srgb,var(--tc) 28%,#fff);
+  text-decoration:none;font-weight:700;font-size:14.5px;white-space:nowrap;transition:background .15s,color .15s,transform .15s}
+nav.tabs a svg{width:16px;height:16px;flex:none}
+nav.tabs a:hover{background:color-mix(in srgb,var(--tc) 16%,#fff);transform:translateY(-1px)}
+nav.tabs a[aria-current="page"]{background:var(--tc);border-color:var(--tc);color:#fff;box-shadow:0 3px 10px color-mix(in srgb,var(--tc) 35%,transparent)}
+nav.tabs a.t-schedule{--tc:#1f6fd1} nav.tabs a.t-events{--tc:#0e8f80} nav.tabs a.t-seats{--tc:#7a4fc4}
+nav.tabs a.t-bracket{--tc:#2f8a3e} nav.tabs a.t-results{--tc:#dd5f22} nav.tabs a.t-standings{--tc:#cf3358}
+nav.tabs a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--track);outline-offset:2px}
+
+main .wrap{padding-block:24px 56px}
+section.view{display:grid;gap:18px}
+h2{font-family:var(--f-display);font-weight:400;font-size:26px;margin:0;line-height:1.2}
+h3{font-size:17px;margin:0}
+.lead{color:var(--muted);margin:0;max-width:65ch}
+.note{font-size:13px;color:var(--muted)}
+
+/* 일정 */
+.timeline{display:grid;gap:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.slot{display:grid;grid-template-columns:118px 1fr auto;gap:14px;align-items:center;padding:14px 18px;border-top:1px solid var(--line)}
+.slot:first-child{border-top:0}
+.slot time{font-family:var(--f-mono);font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.slot .what{min-width:0}
+.slot .what b{display:block;font-size:16px}
+.slot .what small{color:var(--muted);font-size:13px}
+.slot.break{background:var(--bg)}
+.slot.break .what b{font-weight:500;color:var(--muted)}
+.slot.now{background:color-mix(in srgb,var(--track) 12%,var(--surface));box-shadow:inset 4px 0 0 var(--track)}
+.slot.done{opacity:.55}
+.tag{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--bg);border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.tag.live{background:var(--track);border-color:var(--track);color:#fff;font-weight:700}
+.tag.score{border-color:var(--field);color:var(--field)}
+button.tag.pick-live{font:inherit;font-size:12px;cursor:pointer;background:var(--surface);border-color:var(--track);color:var(--track);font-weight:700}
+button.tag.pick-live:hover{background:var(--track);color:#fff}
+
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.fact dt{font-size:12px;color:var(--muted);letter-spacing:.04em}
+.fact dd{margin:2px 0 0;font-weight:500}
+
+/* 종목 */
+.events{display:grid;gap:14px}
+details.ev{background:var(--surface);border:1px solid var(--line);border-radius:12px}
+details.ev summary{list-style:none;cursor:pointer;padding:16px 18px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
+details.ev summary::-webkit-details-marker{display:none}
+.ev-no{font-family:var(--f-display);font-size:24px;color:var(--track);width:28px;text-align:center}
+.ev-title{min-width:0}
+.ev-title b{font-size:17px;display:block}
+.ev-title small{color:var(--muted);font-size:13px}
+.chev{transition:transform .2s;color:var(--muted)}
+details[open] .chev{transform:rotate(180deg)}
+.ev-body{padding:0 18px 18px 60px;display:grid;gap:12px}
+.ev-body ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.ev-meta{display:flex;flex-wrap:wrap;gap:8px}
+.missions{display:grid;gap:10px}
+.mission{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.mission h4{margin:0 0 4px;font-size:15px}
+.mission p{margin:0;font-size:14px}
+.grade-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:6px}
+.gc{border-radius:8px;padding:8px 10px;font-size:13.5px}
+.gc b{display:block}
+.pts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.ptable{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.ptable ol{margin:8px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.ptable li{font-size:13px;background:var(--bg);border-radius:6px;padding:3px 8px;font-variant-numeric:tabular-nums}
+
+/* 자리 배치 */
+.map-scroll{overflow-x:auto}
+.map{min-width:520px;display:grid;grid-template-columns:.73fr 1.5fr .93fr .51fr .96fr .73fr;grid-template-rows:.6fr .68fr 1.13fr 1.15fr 1.37fr .76fr;
+  gap:4px;background:var(--line);border:4px solid var(--line);border-radius:12px;aspect-ratio:1.35/1;max-width:100%}
+.map>div{background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:13px;color:var(--muted);padding:4px;line-height:1.35}
+.map .ground{background:#c8e6b0;color:#2d5a1e;font-family:var(--f-display);font-size:34px;position:relative}
+.map .ground::after{content:"";position:absolute;inset:16px;border:9px solid #1d1d1d;border-radius:999px}
+.map .zone{color:var(--fg);font-weight:700;cursor:pointer;border:0;font:inherit;font-weight:700}
+.map .zone small{font-weight:400;display:block}
+.map .z1{background:var(--g1-soft);box-shadow:inset 0 0 0 2px var(--g1)}
+.map .z2{background:var(--g2-soft);box-shadow:inset 0 0 0 2px var(--g2)}
+.map .z3{background:var(--g3-soft);box-shadow:inset 0 0 0 2px var(--g3)}
+.map .podium{background:color-mix(in srgb,var(--good) 22%,var(--surface));color:var(--fg);font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:10px}
+.legend button{display:flex;gap:8px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font:inherit;color:var(--fg);cursor:pointer}
+.legend button[aria-pressed="true"]{border-color:var(--fg)}
+.sw{width:14px;height:14px;border-radius:4px}
+.map.focus-1 .zone:not(.z1),.map.focus-2 .zone:not(.z2),.map.focus-3 .zone:not(.z3){opacity:.3}
+
+/* 공통 컨트롤 */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg);font-weight:700}
+.chip.g1[aria-pressed="true"]{background:var(--g1);border-color:var(--g1);color:#1c1606}
+.chip.g2[aria-pressed="true"]{background:var(--g2);border-color:var(--g2);color:#fff}
+.chip.g3[aria-pressed="true"]{background:var(--g3);border-color:var(--g3);color:#fff}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.btn{font:inherit;font-size:14px;font-weight:700;padding:8px 16px;border-radius:8px;border:1px solid var(--field);background:var(--field);color:var(--field-ink);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--field)}
+.admin{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.admin input{font:inherit;font-size:14px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);width:130px}
+.badge{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--track);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+.status{font-size:13px;color:var(--muted)}
+.status.ok{color:var(--good)} .status.err{color:var(--track)}
+
+.tbl-scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:10px 12px;border-top:1px solid var(--line);text-align:center;white-space:nowrap}
+thead th{border-top:0;font-size:13px;color:var(--muted);font-weight:500;background:var(--bg)}
+th.left,td.left{text-align:left}
+tbody th{font-weight:700}
+.rec-in{display:inline-flex;align-items:center;gap:4px}
+.rec-in i{font-style:normal;color:var(--muted);font-size:13px}
+td .rec-in input{width:64px;min-width:0;text-align:right}
+td input,td select{font:inherit;font-size:14px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);width:100%;min-width:84px}
+td select{min-width:96px}
+.medal{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;font-weight:700;font-size:13px;background:var(--bg);border:1px solid var(--line)}
+.medal.r1{background:var(--gold);border-color:var(--gold);color:#1d1600}
+.medal.r2{background:var(--silver);border-color:var(--silver);color:#11161a}
+.medal.r3{background:var(--bronze);border-color:var(--bronze);color:#fff}
+.empty{color:var(--muted)}
+.pt{font-weight:700}
+
+.board{display:grid;gap:22px}
+.grade-block{display:grid;gap:10px}
+.grade-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline}
+.grade-head h3{font-family:var(--f-display);font-weight:400;font-size:22px}
+.progress{font-size:13px;color:var(--muted)}
+.podium-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.pod{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:2px}
+.pod .r{font-size:12px;color:var(--muted)}
+.pod .c{font-family:var(--f-display);font-size:26px;line-height:1.15}
+.pod .s{font-variant-numeric:tabular-nums;font-size:14px}
+.pod.first{border-color:var(--gold);box-shadow:inset 0 3px 0 var(--gold)}
+tr.top td,tr.top th{background:color-mix(in srgb,var(--gold) 10%,transparent)}
+.banner{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:12px 14px;font-size:14px;color:var(--muted)}
+
+/* 날씨 */
+.weather{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:12px 16px;align-items:center;justify-content:space-between}
+.wx-main{display:flex;align-items:center;gap:14px;min-width:0;flex:1 1 280px}
+.wx-icon{width:44px;height:44px;flex:none;color:#e0a01a}
+.wx-icon svg{width:100%;height:100%}
+.wx-text{display:grid;min-width:0;flex:1}
+.wx-label{font-size:12px;color:var(--muted);letter-spacing:.04em}
+.wx-text b{font-size:18px}
+.wx-temp{flex:none;font-family:var(--f-display);font-size:34px;line-height:1;color:var(--track)}
+.weather a.btn{text-decoration:none;display:inline-block}
+.wx-form{flex-basis:100%;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.wx-form label{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+.wx-form label.wide{flex:1;min-width:200px}
+.wx-form input,.wx-form select{font:inherit;font-size:14px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);width:100%}
+.wx-form input[type=number]{width:90px}
+
+/* 대진표 */
+.bracket-scroll{overflow-x:auto;padding-bottom:4px}
+.bracket{display:flex;gap:18px;min-width:max-content}
+.round{display:flex;flex-direction:column;gap:12px;width:200px}
+.round h4{margin:0;font-size:13px;color:var(--muted);font-weight:700;letter-spacing:.04em;text-align:center}
+.round .games{flex:1;display:flex;flex-direction:column;justify-content:space-around;gap:14px}
+.match{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.match .mt{font-size:11.5px;color:var(--muted);padding:5px 10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.team{display:flex;align-items:center;gap:8px;width:100%;padding:8px 10px;border:0;background:transparent;font:inherit;color:var(--fg);text-align:left}
+.team + .team{border-top:1px dashed var(--line)}
+.team .no{font-family:var(--f-mono);font-size:11px;color:var(--muted);width:22px}
+.team .nm{flex:1;font-weight:700}
+.team .nm.tbd{font-weight:400;color:var(--muted);font-size:13px}
+.team .ck{font-size:11px;font-weight:700;color:#fff;background:#2f8a3e;border-radius:999px;padding:1px 8px}
+.team.win{background:color-mix(in srgb,#2f8a3e 12%,var(--surface))}
+.team.lose .nm{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+.team.pick{cursor:pointer}
+.team.pick:hover{background:color-mix(in srgb,#2f8a3e 8%,var(--surface))}
+.match.final{border-color:var(--gold);box-shadow:inset 0 3px 0 var(--gold)}
+.draw{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:12px}
+.draw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.draw-grid label{display:flex;align-items:center;gap:6px;font-size:14px}
+.draw-grid select{font:inherit;font-size:14px;padding:5px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);flex:1;min-width:0}
+.result-line{display:flex;flex-wrap:wrap;gap:8px}
+
+footer{color:var(--muted);font-size:12.5px;border-top:1px solid var(--line)}
+footer .wrap{padding-block:18px}
+
+@media (max-width:640px){
+  .slot{grid-template-columns:1fr auto;gap:2px 10px;padding:12px 14px}
+  .slot time{grid-column:1/-1}
+  .ev-body{padding:0 16px 16px}
+  .pts{grid-template-columns:1fr}
+  .dday{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">관동중학교 · 건전한 정신, 화합의 장</div>
+      <h1>2026 관동체육축제</h1>
+      <div class="meta">2026. 11. 13.(금) 08:50 ~ 15:10 · 관동중학교 운동장</div>
+    </div>
+    <div class="dday" id="dday"><b>D-16</b><span>축제까지</span></div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="메뉴">
+  <div class="wrap">
+    <a class="t-schedule" href="#schedule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>경기 일정</a>
+    <a class="t-events" href="#events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>종목 안내</a>
+    <a class="t-seats" href="#seats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>자리 배치</a>
+    <a class="t-bracket" href="#bracket"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h5v5H3M3 14h5v5H3M8 7.5h3v9H8M11 12h4M15 9h6v6h-6z"/></svg>줄다리기 대진표</a>
+    <a class="t-results" href="#results"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>종목별 결과</a>
+    <a class="t-standings" href="#standings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>종합 점수</a>
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+
+<!-- 경기 일정 -->
+<section class="view" id="v-schedule">
+  <div><h2>경기 일정</h2><p class="lead" id="sched-lead">11월 13일 금요일, 학년·학급별로 경기와 응원을 함께 진행합니다. 당일에는 지금 진행 중인 순서가 표시됩니다. 경기가 늦어지면 진행 본부가 순서를 직접 바꿉니다.</p></div>
+  <div class="toolbar">
+    <div class="status" id="sc-status">시간표 시각에 맞춰 진행 중인 순서가 자동으로 표시됩니다.</div>
+    <div class="admin">
+      <div class="admin" id="sc-admin"></div>
+      <button class="btn ghost" type="button" id="sc-auto" hidden>시간표대로 자동 표시</button>
+    </div>
+  </div>
+  <div class="weather" id="weather">
+    <div class="wx-main">
+      <span class="wx-icon" id="wx-icon" aria-hidden="true"></span>
+      <div class="wx-text"><span class="wx-label">운동장 날씨</span><b id="wx-sky">아직 입력 전</b><span class="note" id="wx-note">행사 당일 아침에 날씨가 올라옵니다.</span></div>
+      <span class="wx-temp" id="wx-temp"></span>
+    </div>
+    <div class="chips">
+      <a class="btn ghost" href="https://www.weather.go.kr/w/index.do" target="_blank" rel="noopener">기상청 날씨 보기</a>
+      <button class="btn ghost" type="button" id="wx-edit" hidden>날씨 입력</button>
+    </div>
+    <form class="wx-form" id="wx-form" hidden>
+      <label for="wx-sky-in">날씨<select id="wx-sky-in"><option>맑음</option><option>구름 조금</option><option>구름 많음</option><option>흐림</option><option>비</option><option>눈</option></select></label>
+      <label for="wx-temp-in">기온(℃)<input id="wx-temp-in" type="number" inputmode="decimal" step="0.1" placeholder="12"></label>
+      <label for="wx-note-in" class="wide">메모<input id="wx-note-in" maxlength="60" placeholder="예: 바람 강함, 미세먼지 보통, 외투 챙기기"></label>
+      <div class="chips"><button class="btn" type="submit">저장</button><button class="btn ghost" type="button" id="wx-cancel">취소</button></div>
+    </form>
+  </div>
+  <div class="timeline" id="timeline"></div>
+  <dl class="facts">
+    <div class="fact"><dt>준비물</dt><dd>반티, 체육복, 운동화, 개인 물병(텀블러), 모자, 선크림, 외투</dd></div>
+    <div class="fact"><dt>음식</dt><dd>외부 음식 반입 금지</dd></div>
+    <div class="fact"><dt>다치거나 아프면</dt><dd>행사본부석 보건 선생님께</dd></div>
+    <div class="fact"><dt>날씨</dt><dd>우천·기상 악화 시 연기 또는 변경</dd></div>
+  </dl>
+</section>
+
+<!-- 종목 안내 -->
+<section class="view" id="v-events" hidden>
+  <div><h2>종목 안내</h2><p class="lead">점수가 들어가는 다섯 종목의 경기 방식과 참가 인원입니다. 종목을 눌러 자세한 규칙을 확인하세요.</p></div>
+  <div class="events" id="event-list"></div>
+  <div class="pts">
+    <div class="ptable"><h3>순위 점수 ①</h3><span class="note">미션 이어달리기 · 훌라후프 넘기기 · 8자 줄넘기</span>
+      <ol><li>1위 100</li><li>2위 95</li><li>3위 90</li><li>4위 85</li><li>5위 80</li><li>6위 75</li><li>7위 70</li><li>8위 65</li><li>9위 60</li></ol></div>
+    <div class="ptable"><h3>순위 점수 ②</h3><span class="note">이어달리기</span>
+      <ol><li>1위 80</li><li>2위 70</li><li>3위 60</li><li>4위 50</li><li>5위 이하 40</li></ol></div>
+    <div class="ptable"><h3>순위 점수 ③</h3><span class="note">줄다리기</span>
+      <ol><li>1위 100</li><li>2위 90</li><li>3위 80</li><li>4위 70</li><li>5위 이하 60</li></ol></div>
+  </div>
+  <p class="note">미션 이어달리기와 이어달리기 선수는 중복할 수 없습니다. 지각·조퇴·결석 등으로 학급 인원이 부족하면 중복할 수 있습니다.</p>
+</section>
+
+<!-- 자리 배치 -->
+<section class="view" id="v-seats" hidden>
+  <div><h2>학년별 자리 배치</h2><p class="lead">학년을 누르면 해당 학년 자리만 강조됩니다. 각 반 담임 또는 교과 선생님이 지정석에서 함께합니다.</p></div>
+  <div class="legend" id="legend">
+    <button type="button" data-g="1" aria-pressed="false"><span class="sw" style="background:var(--g1)"></span>1학년 · 8개 반</button>
+    <button type="button" data-g="2" aria-pressed="false"><span class="sw" style="background:var(--g2)"></span>2학년 · 8개 반</button>
+    <button type="button" data-g="3" aria-pressed="false"><span class="sw" style="background:var(--g3)"></span>3학년 · 9개 반</button>
+  </div>
+  <div class="map-scroll">
+    <div class="map" id="map">
+      <div style="grid-column:1;grid-row:1/4"></div>
+      <div style="grid-column:2/5;grid-row:1">나무</div>
+      <div style="grid-column:5;grid-row:1">캐노피</div>
+      <div style="grid-column:6;grid-row:1">체육 교구실</div>
+      <button class="zone z3" data-g="3" style="grid-column:2/6;grid-row:2">3학년<small>천막 (9학급)</small></button>
+      <div style="grid-column:6;grid-row:2/4"></div>
+      <div class="ground" style="grid-column:2/6;grid-row:3/6">운동장</div>
+      <div style="grid-column:1;grid-row:4">축구 골대</div>
+      <div style="grid-column:6;grid-row:4">축구 골대</div>
+      <button class="zone z1" data-g="1" style="grid-column:1;grid-row:5">1학년<small>천막 (2학급)</small></button>
+      <button class="zone z2" data-g="2" style="grid-column:6;grid-row:5">2학년<small>천막 (2학급)</small></button>
+      <div style="grid-column:1;grid-row:6"></div>
+      <button class="zone z1" data-g="1" style="grid-column:2;grid-row:6">1학년<small>스탠드 (6학급)</small></button>
+      <div class="podium" style="grid-column:3;grid-row:6">조례대<small style="font-weight:400">본부</small></div>
+      <button class="zone z2" data-g="2" style="grid-column:4/6;grid-row:6">2학년<small>스탠드 (6학급)</small></button>
+      <div style="grid-column:6;grid-row:6"></div>
+    </div>
+  </div>
+  <div class="facts">
+    <div class="fact"><dt>1학년</dt><dd>조례대 왼쪽 스탠드 6학급, 왼쪽 축구 골대 옆 천막 2학급</dd></div>
+    <div class="fact"><dt>2학년</dt><dd>조례대 오른쪽 스탠드 6학급, 오른쪽 축구 골대 옆 천막 2학급</dd></div>
+    <div class="fact"><dt>3학년</dt><dd>나무 쪽 긴 천막에 9학급 모두</dd></div>
+  </div>
+</section>
+
+<!-- 줄다리기 대진표 -->
+<section class="view" id="v-bracket" hidden>
+  <div><h2>줄다리기 대진표</h2><p class="lead">토너먼트로 진행하고 결승전과 3·4위전을 치릅니다. 3학년은 9개 반이라 예선 1경기가 있습니다. 승리한 반이 표시되면 종목별 결과와 종합 점수에 바로 반영됩니다.</p></div>
+  <div class="chips" id="b-grade"></div>
+  <div class="toolbar">
+    <div class="status" id="b-status"></div>
+    <div class="admin">
+      <div class="admin" id="b-admin"></div>
+      <div class="chips" id="b-actions" hidden>
+        <button class="btn ghost" type="button" id="b-draw-btn">추첨 결과 입력</button>
+      </div>
+    </div>
+  </div>
+  <form class="draw" id="b-draw" hidden>
+    <div><h3>추첨 결과 입력</h3><span class="note">추첨 번호마다 뽑은 반을 고르세요. 추첨을 바꾸면 이미 표시한 승패는 지워집니다.</span></div>
+    <div class="draw-grid" id="b-draw-grid"></div>
+    <div class="chips"><button class="btn" type="submit">추첨 저장</button><button class="btn ghost" type="button" id="b-draw-cancel">취소</button></div>
+  </form>
+  <div class="bracket-scroll"><div class="bracket" id="bracket"></div></div>
+  <div class="result-line" id="b-ranks"></div>
+  <p class="note" id="b-hint"></p>
+</section>
+
+<!-- 종목별 결과 -->
+<section class="view" id="v-results" hidden>
+  <div><h2>종목별 경기 결과</h2><p class="lead" id="results-lead">학년과 종목을 고르면 반별 기록과 순위, 받은 점수가 나옵니다.</p></div>
+  <div class="chips" id="r-grade"></div>
+  <div class="chips" id="r-event"></div>
+  <div class="toolbar">
+    <div class="status" id="r-status">결과를 불러오는 중입니다.</div>
+    <div class="admin" id="admin-box"></div>
+    <div class="chips" id="r-actions" hidden>
+      <button class="btn ghost" type="button" id="r-edit">결과 입력</button>
+      <button class="btn" type="button" id="r-save" hidden>저장</button>
+    </div>
+  </div>
+  <div class="tbl-scroll"><table id="r-table"></table></div>
+  <p class="note" id="r-hint"></p>
+</section>
+
+<!-- 종합 점수 -->
+<section class="view" id="v-standings" hidden>
+  <div><h2>학년별 종합 점수</h2><p class="lead">다섯 종목 점수를 더한 학급 순위입니다. 결과가 입력되는 대로 바로 바뀝니다.</p></div>
+  <div class="banner" id="s-banner" hidden></div>
+  <div class="chips" id="s-grade"></div>
+  <div class="board" id="board"></div>
+  <p class="note">총점이 같으면 미션 이어달리기 → 훌라후프 넘기기 → 8자 줄넘기 → 줄다리기 → 이어달리기 순서로 해당 종목 순위가 높은 학급이 앞섭니다. 위쪽에는 1·2학년은 4위까지, 3학년은 5위까지 표시됩니다.</p>
+</section>
+
+</div>
+</main>
+<footer><div class="wrap">2026학년도 관동체육축제 운영 계획. 일정과 배치는 당일 사정에 따라 바뀔 수 있습니다.</div></footer>
+
+<script>
+const GRADES = {1:8, 2:8, 3:9};
+const EVENTS = [
+  {key:"tug",    name:"줄다리기",       scale:"C", record:null},
+  {key:"hoop",   name:"훌라후프 넘기기", scale:"A", record:{label:"기록 (시간)", type:"time"}},
+  {key:"rope8",  name:"8자 줄넘기",      scale:"A", record:{label:"기록 (횟수)", type:"count"}},
+  {key:"mission",name:"미션 이어달리기", scale:"A", record:{label:"기록 (시간)", type:"time"}},
+  {key:"relay",  name:"이어달리기",      scale:"B", record:null},
+];
+// 동점 시 비교 순서
+const TIEBREAK = ["mission","hoop","rope8","tug","relay"];
+const SCALE_A = [100,95,90,85,80,75,70,65,60];
+const SCALE_B = [80,70,60,50];   // 이어달리기, 5위 이하 40
+const SCALE_C = [100,90,80,70];  // 줄다리기, 5위 이하 60
+const pointsFor = (ev, rank) => {
+  if (!rank) return null;
+  const e = EVENTS.find(x => x.key === ev);
+  if (e.scale === "A") return SCALE_A[rank-1] ?? 60;
+  if (e.scale === "C") return SCALE_C[rank-1] ?? 60;
+  return SCALE_B[rank-1] ?? 40;
+};
+
+/* ---------- 일정 ---------- */
+const SCHEDULE = [
+  {s:"08:50", e:"09:15", t:"개회 선언 및 준비체조", who:"전 학년"},
+  {s:"09:15", e:"10:30", t:"줄다리기", who:"학년별 경기 · 학급 전원 · 토너먼트", ev:"tug"},
+  {s:"10:30", e:"11:10", t:"훌라후프 넘기기", who:"학년별 경기 · 학급 전원", ev:"hoop"},
+  {s:"11:10", e:"11:50", t:"8자 줄넘기", who:"학년별 경기 · 학급 전원", ev:"rope8"},
+  {s:"11:50", e:"13:00", t:"점심시간", who:"", kind:"break"},
+  {s:"13:00", e:"13:10", t:"학생 공연 1", who:"댄스 동아리"},
+  {s:"13:10", e:"13:50", t:"미션 이어달리기", who:"학년별 경기 · 각 반 대표 22명", ev:"mission"},
+  {s:"13:50", e:"14:30", t:"이어달리기", who:"학년별 경기 · 각 반 대표 남 3명 · 여 3명", ev:"relay"},
+  {s:"14:30", e:"14:40", t:"학생 공연 2", who:"댄스 동아리"},
+  {s:"14:40", e:"14:50", t:"주변 정리", who:"전 학년", kind:"break"},
+  {s:"14:50", e:"15:00", t:"시상 및 폐회", who:"전 학년"},
+  {s:"15:00", e:"15:10", t:"마무리 및 종례", who:"전 학년", kind:"break"},
+];
+const DAY = {y:2026, m:10, d:13}; // 11월 (0부터)
+const toDate = hm => { const [h,mi] = hm.split(":").map(Number); return new Date(DAY.y, DAY.m, DAY.d, h, mi); };
+
+// info/live = { index: 진행 중 순서 번호(0부터) | null(시간표대로 자동) }
+let liveManual = null;
+function renderSchedule(){
+  const now = new Date();
+  const tl = document.getElementById("timeline");
+  const manual = Number.isInteger(liveManual) && liveManual >= 0 && liveManual < SCHEDULE.length;
+  const editable = isAdmin && canWrite && dbState === "ready";
+  tl.innerHTML = "";
+  SCHEDULE.forEach((it, i) => {
+    const row = document.createElement("div");
+    const start = toDate(it.s), end = toDate(it.e);
+    const live = manual ? i === liveManual : (now >= start && now < end);
+    const done = manual ? i < liveManual : now >= end;
+    row.className = "slot" + (it.kind==="break" ? " break" : "") + (live ? " now" : done ? " done" : "");
+    row.innerHTML = `<time>${it.s} – ${it.e}</time><div class="what"><b></b><small></small></div><span></span>`;
+    row.querySelector("b").textContent = it.t;
+    row.querySelector("small").textContent = it.who;
+    const tag = row.querySelector("span");
+    if (live){ tag.className = "tag live"; tag.textContent = "진행 중"; }
+    else if (it.ev){ tag.className = "tag score"; tag.textContent = "점수 종목"; }
+    if (editable && !(manual && live)){
+      tag.outerHTML = `<button type="button" class="tag pick-live" data-i="${i}">진행 중으로</button>`;
+    }
+    tl.appendChild(row);
+  });
+  tl.querySelectorAll(".pick-live").forEach(b => b.onclick = () => setLive(+b.dataset.i));
+  const st = document.getElementById("sc-status");
+  if (!st.dataset.keep) st.textContent = manual ? `진행 본부가 지정한 순서(${SCHEDULE[liveManual].t})를 표시하고 있습니다.` : "시간표 시각에 맞춰 진행 중인 순서가 자동으로 표시됩니다.";
+  delete st.dataset.keep;
+  adminControls(document.getElementById("sc-admin"), st, "관리자 모드가 켜졌습니다. 일정에서 '진행 중으로'를 누르거나 날씨를 입력할 수 있습니다.");
+  document.getElementById("sc-auto").hidden = !(editable && manual);
+  const dd = document.getElementById("dday");
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const diff = Math.round((new Date(DAY.y,DAY.m,DAY.d) - today) / 86400000);
+  dd.innerHTML = diff > 0 ? `<b>D-${diff}</b><span>축제까지</span>`
+    : diff === 0 ? `<b>D-DAY</b><span>오늘은 체육축제!</span>`
+    : `<b>종료</b><span>함께해 줘서 고마워요</span>`;
+}
+
+async function setLive(index){
+  const st = document.getElementById("sc-status");
+  try{
+    await db.collection("info").doc("live").set({index, updatedAt: new Date().toISOString()});
+    liveManual = index;
+  }catch{ st.className = "status err"; st.textContent = "저장하지 못했습니다. 잠시 뒤 다시 눌러 주세요."; st.dataset.keep = "1"; }
+  renderSchedule();
+}
+document.getElementById("sc-auto").onclick = () => setLive(null);
+
+/* ---------- 종목 안내 ---------- */
+const EVENT_INFO = [
+  {no:1, name:"줄다리기", time:"09:15 – 10:30", who:"학급 전원", tags:["3판 2선승","토너먼트","점수 ③"],
+   rules:["한 판은 20초이며 3판 2선승제로 승부를 냅니다.","토너먼트로 진행하며 결승전과 3·4위전을 치릅니다. 5~9위 결정전은 하지 않습니다.","두 반 중 인원이 적은 반에 맞춰 선수를 정하고, 남녀 인원을 같게 맞춥니다."]},
+  {no:2, name:"훌라후프 넘기기", time:"10:30 – 11:10", who:"학급 전원", tags:["시간 기록","점수 ①"],
+   rules:["남학생과 여학생은 각각 축구 골대에서 가장 가까운 학생을 1번으로 하여 순서대로 줄을 섭니다.","남학생 전원이 손을 잡고 서서, 휘슬이 울리면 1번 학생부터 차례로 훌라후프를 통과시킵니다.","통과하는 동안 잡은 손을 놓거나 훌라후프를 손으로 잡으면 안 됩니다.","훌라후프를 놓치거나 바닥에 떨어뜨린 경우, 잡은 손이 떨어진 경우에는 그 지점에서 다시 시작합니다.","남학생이 끝나면 마지막 남학생이 반대편 여학생 줄 맨 끝의 1번 학생에게 훌라후프를 전달하고, 여학생도 1번부터 같은 방법으로 진행합니다.","마지막 여학생이 통과한 뒤 도착점을 지나는 시간을 기록합니다.","전체 반 중 인원이 가장 적은 반에 맞춰 선수를 정하고, 남녀 인원을 같게 맞춥니다."]},
+  {no:3, name:"8자 줄넘기", time:"11:10 – 11:50", who:"학급 전원 (줄 돌리는 사람 2명)", tags:["2분 횟수","점수 ①"],
+   rules:["2분 동안 한 명씩 줄을 넘어 통과한 수를 기록합니다.","줄은 시작과 동시에 돌리기 시작합니다.","줄을 넘지 못하고 지나가면 횟수에 넣지 않습니다.","전체 반 중 인원이 가장 적은 반에 맞춰 선수를 정합니다."]},
+  {no:4, name:"미션 이어달리기", time:"13:10 – 13:50", who:"각 반 22명", tags:["5개 미션","시간 기록","점수 ①"], missions:true},
+  {no:5, name:"이어달리기", time:"13:50 – 14:30", who:"각 반 남학생 3명 · 여학생 3명", tags:["결승선 순서","점수 ②"],
+   rules:["배턴을 주고받으며 달려 결승선을 통과한 순서로 등위를 정합니다.","홀수 번 주자는 여학생, 짝수 번 주자는 남학생입니다.","1번 주자는 정해진 구간까지 반드시 자기 레인으로만 달려야 합니다.","1~5번 주자는 트랙 반 바퀴, 마지막 주자는 한 바퀴를 달립니다."]},
+];
+const MISSIONS = [
+  {t:"미션 1 · 단체 줄넘기 (줄 돌리는 2명 포함 6명)", d:"휘슬 소리에 맞춰 단체 줄넘기를 10회 연속 성공합니다. 10회 전에 걸리면 처음부터 다시 합니다. 성공하면 훌라후프를 들고 다음 장소로 이동합니다."},
+  {t:"미션 2 · 훌라후프 던지기 (2명)", d:"정해진 선에서 파란 통을 향해 훌라후프를 던져 넣습니다. 두 학생 모두 성공하면 두 번째 학생이 통 안의 미션 도구를 들고 이동합니다."},
+  {t:"미션 3 · 학년별 체육 수업 미션 (2명)", d:"학년마다 다른 미션을 두 학생이 차례로 성공해야 합니다.", grades:[
+    {g:1, n:"플라잉 디스크 골프", d:"5m 거리에서 디스크를 던져 디스캐처에 넣습니다. 실패하면 시작점에서 다시 던집니다. 둘 다 성공하면 디스캐처 아래 배구공을 들고 이동합니다."},
+    {g:2, n:"발야구", d:"5m 거리에서 공을 굴려 콘 2개 중 하나를 맞히고, 두 번째 학생은 남은 콘을 맞힙니다. 공이 튀어서 맞으면 실패이며, 실패하면 출발 위치에서 다시 굴립니다."},
+    {g:3, n:"저글링 캐스케이드 이동", d:"저글링하며 10m를 이동해 전달하고, 두 번째 학생이 출발점으로 돌아옵니다. 떨어뜨리면 심판이 정한 위치에서 다시 시작합니다."},
+  ]},
+  {t:"미션 4 · 협동 공 튀기기 (10명)", d:"10명이 힘을 모아 공 튀기기 10회를 성공합니다. 중간에 실패해도 그때까지 센 횟수는 인정하고 이어서 셉니다."},
+  {t:"미션 5 · 줄넘기 2단 뛰기 (2명)", d:"한 명씩 줄넘기 2단 뛰기를 연속 10회 성공합니다. 실패하면 처음부터 다시 셉니다. 두 번째 학생이 성공하면 기록이 끝납니다."},
+];
+function renderEvents(){
+  const box = document.getElementById("event-list");
+  box.innerHTML = EVENT_INFO.map(e => `
+    <details class="ev"${e.no===1?" open":""}>
+      <summary><span class="ev-no">${e.no}</span>
+        <span class="ev-title"><b>${e.name}</b><small>${e.time} · ${e.who}</small></span>
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="ev-body">
+        <div class="ev-meta">${e.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+        ${e.rules ? `<ul>${e.rules.map(r=>`<li>${r}</li>`).join("")}</ul>` : ""}
+        ${e.missions ? `<div class="missions">${MISSIONS.map(m=>`
+          <div class="mission"><h4>${m.t}</h4><p>${m.d}</p>
+          ${m.grades ? `<div class="grade-cards">${m.grades.map(g=>`<div class="gc" style="background:var(--g${g.g}-soft);box-shadow:inset 3px 0 0 var(--g${g.g})"><b>${g.g}학년 · ${g.n}</b>${g.d}</div>`).join("")}</div>` : ""}
+          </div>`).join("")}</div><p class="note">두 번째 2단 뛰기 주자가 끝나면 심판이 타이머를 멈추고, 최종 기록으로 순위를 정합니다.</p>` : ""}
+      </div>
+    </details>`).join("");
+}
+
+/* ---------- 자리 배치 ---------- */
+let seatFocus = 0;
+function setSeatFocus(g){
+  seatFocus = seatFocus === g ? 0 : g;
+  const map = document.getElementById("map");
+  map.className = "map" + (seatFocus ? " focus-" + seatFocus : "");
+  document.querySelectorAll("#legend button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.g === seatFocus)));
+}
+document.getElementById("legend").addEventListener("click", e => { const b = e.target.closest("button"); if (b) setSeatFocus(+b.dataset.g); });
+document.getElementById("map").addEventListener("click", e => { const b = e.target.closest(".zone"); if (b) setSeatFocus(+b.dataset.g); });
+
+/* ---------- 결과 데이터 ---------- */
+// results/g{학년}-{종목} = { ranks:{ "1":2, ... }, records:{ "1":"1:32.4", ... } }
+const results = {};
+let db = null, canWrite = false, dbState = "loading";
+const docId = (g, ev) => `g${g}-${ev}`;
+
+function standings(g){
+  const n = GRADES[g];
+  const rows = [];
+  for (let c = 1; c <= n; c++){
+    const per = {}; let total = 0;
+    for (const e of EVENTS){
+      const rank = results[docId(g, e.key)]?.ranks?.[c] || 0;
+      const p = pointsFor(e.key, rank);
+      per[e.key] = {rank, p};
+      total += p || 0;
+    }
+    rows.push({c, per, total});
+  }
+  const rk = (r, k) => r.per[k].rank || 99;
+  rows.sort((a,b) => b.total - a.total || TIEBREAK.reduce((acc,k) => acc || rk(a,k) - rk(b,k), 0) || a.c - b.c);
+  rows.forEach((r,i) => r.place = i + 1);
+  const entered = EVENTS.filter(e => Object.values(results[docId(g,e.key)]?.ranks || {}).some(Boolean)).length;
+  return {rows, entered};
+}
+
+/* ---------- 종목별 결과 화면 ---------- */
+let rGrade = 1, rEvent = "tug", editing = false;
+// 관리자 모드: 비밀번호 확인 후에만 결과 입력 버튼이 열림 (이 탭에서만 유지)
+const ADMIN_HASH = "124aec7171598f2fc8a17015f5b370a83736bb08e24a242d4be2f1719e6f6986";
+let isAdmin = false, adminFormOpen = false;
+try { isAdmin = sessionStorage.getItem("kd-admin") === "1"; } catch {}
+async function sha256(t){
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
+}
+// 관리자 버튼 묶음 (종목별 결과·대진표 탭에서 함께 씀)
+function adminControls(el, statusEl, onUnlockMsg){
+  const ready = canWrite && dbState === "ready";
+  el.hidden = !ready;
+  if (!ready) return;
+  el.innerHTML = isAdmin
+    ? `<span class="badge">관리자 모드</span><button class="btn ghost" type="button" data-act="lock">관리자 모드 끄기</button>`
+    : adminFormOpen
+      ? `<form class="admin"><input type="password" inputmode="numeric" autocomplete="off" placeholder="비밀번호" aria-label="관리자 비밀번호"><button class="btn" type="submit">확인</button><button class="btn ghost" type="button" data-act="cancel">취소</button></form>`
+      : `<button class="btn ghost" type="button" data-act="open">관리자 모드</button>`;
+  el.querySelector('[data-act="open"]')?.addEventListener("click", () => { adminFormOpen = true; rerenderAdminViews(); el.querySelector("input")?.focus(); });
+  el.querySelector('[data-act="cancel"]')?.addEventListener("click", () => { adminFormOpen = false; rerenderAdminViews(); });
+  el.querySelector('[data-act="lock"]')?.addEventListener("click", () => {
+    isAdmin = false; editing = false; drawOpen = false; try { sessionStorage.removeItem("kd-admin"); } catch {}
+    rerenderAdminViews();
+  });
+  el.querySelector("form")?.addEventListener("submit", async e => {
+    e.preventDefault();
+    const pw = el.querySelector("input");
+    let ok = false; try { ok = await sha256(pw.value.trim()) === ADMIN_HASH; } catch {}
+    pw.value = "";
+    if (ok){
+      isAdmin = true; adminFormOpen = false; try { sessionStorage.setItem("kd-admin","1"); } catch {}
+      rerenderAdminViews(); statusEl.className = "status ok"; statusEl.textContent = onUnlockMsg;
+    } else { statusEl.className = "status err"; statusEl.textContent = "비밀번호가 맞지 않습니다."; pw.focus(); }
+  });
+}
+function rerenderAdminViews(){
+  renderWeather();
+  if (!document.getElementById("v-schedule").hidden) renderSchedule();
+  if (!document.getElementById("v-results").hidden) renderResults();
+  if (!document.getElementById("v-bracket").hidden) renderBracket();
+}
+function chipRow(el, items, current, onPick){
+  el.innerHTML = "";
+  for (const it of items){
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "chip" + (it.cls ? " " + it.cls : "");
+    b.textContent = it.label; b.setAttribute("aria-pressed", String(it.value === current));
+    b.onclick = () => onPick(it.value);
+    el.appendChild(b);
+  }
+}
+const gradeItems = [1,2,3].map(g => ({value:g, label:`${g}학년`, cls:`g${g}`}));
+
+function rankOptions(ev, n){
+  const e = EVENTS.find(x => x.key === ev);
+  const opts = [`<option value="0">-</option>`];
+  if (ev === "tug"){ for (let r=1;r<=4;r++) opts.push(`<option value="${r}">${r}위</option>`); opts.push(`<option value="5">5위 이하</option>`); }
+  else for (let r=1;r<=n;r++) opts.push(`<option value="${r}">${r}위</option>`);
+  return opts.join("");
+}
+const rankLabel = (ev, r) => !r ? "" : (ev === "tug" && r >= 5) ? "5위 이하" : `${r}위`;
+
+function renderResults(){
+  chipRow(document.getElementById("r-grade"), gradeItems, rGrade, g => { rGrade = g; editing = false; renderResults(); });
+  chipRow(document.getElementById("r-event"), EVENTS.map(e => ({value:e.key, label:e.name})), rEvent, k => { rEvent = k; editing = false; renderResults(); });
+  const ev = EVENTS.find(e => e.key === rEvent), n = GRADES[rGrade];
+  const doc = results[docId(rGrade, rEvent)] || {};
+  const ranks = doc.ranks || {}, recs = doc.records || {};
+  const t = document.getElementById("r-table");
+  const recHead = ev.record ? `<th>${ev.record.label}</th>` : "";
+  let body = "";
+  for (let c = 1; c <= n; c++){
+    const r = +ranks[c] || 0, p = pointsFor(rEvent, r);
+    if (editing && ev.record){
+      const inputs = ev.record.type === "time"
+        ? `<span class="rec-in"><input type="number" inputmode="numeric" min="0" step="1" id="min-${c}" aria-label="${c}반 분" placeholder="0"><i>분</i><input type="number" inputmode="decimal" min="0" max="59.99" step="0.01" id="sec-${c}" aria-label="${c}반 초" placeholder="0"><i>초</i></span>`
+        : `<span class="rec-in"><input type="number" inputmode="numeric" min="0" step="1" id="cnt-${c}" aria-label="${c}반 횟수" placeholder="0"><i>회</i></span>`;
+      body += `<tr><th>${c}반</th><td>${inputs}</td><td id="rank-${c}"><span class="empty">-</span></td><td class="pt" id="pt-${c}">-</td></tr>`;
+    } else if (editing){
+      body += `<tr><th>${c}반</th><td><select id="rank-${c}" data-c="${c}" aria-label="${c}반 순위">${rankOptions(rEvent, n)}</select></td><td class="pt" id="pt-${c}">${p ?? "-"}</td></tr>`;
+    } else {
+      const medal = r ? `<span class="medal${r<=3?" r"+r:""}">${r>=5&&rEvent==="tug"?"5+":r}</span>` : `<span class="empty">-</span>`;
+      body += `<tr><th>${c}반</th>${ev.record ? `<td>${recs[c] ? esc(fmtRecord(ev, recs[c])) : '<span class="empty">-</span>'}</td>` : ""}<td>${medal}</td><td class="pt">${p ?? '<span class="empty">-</span>'}</td></tr>`;
+    }
+  }
+  t.innerHTML = `<thead><tr><th>학급</th>${recHead}<th>순위</th><th>점수</th></tr></thead><tbody>${body}</tbody>`;
+  if (editing && ev.record){
+    for (let c = 1; c <= n; c++){
+      const v = parseRecord(recs[c]);
+      if (v === null) continue;
+      if (ev.record.type === "time"){
+        document.getElementById(`min-${c}`).value = String(Math.floor(v / 60));
+        document.getElementById(`sec-${c}`).value = (v % 60).toFixed(2);
+      } else document.getElementById(`cnt-${c}`).value = String(v);
+    }
+    t.querySelectorAll("input").forEach(i => i.oninput = autoRank);
+    autoRank();
+  } else if (editing){
+    for (let c = 1; c <= n; c++) document.getElementById(`rank-${c}`).value = String(+ranks[c] || 0);
+    t.querySelectorAll("select").forEach(s => s.onchange = () => {
+      const c = s.dataset.c; document.getElementById(`pt-${c}`).textContent = pointsFor(rEvent, +s.value) ?? "-";
+    });
+  }
+  // 상태 / 버튼
+  const st = document.getElementById("r-status");
+  const filled = Object.values(ranks).filter(Boolean).length;
+  if (dbState === "off"){ st.className = "status err"; st.textContent = "결과 저장소에 연결되지 않아 기록을 표시할 수 없습니다. 인터넷 연결을 확인하거나 잠시 뒤 새로고침해 주세요."; }
+  else if (dbState === "loading"){ st.className = "status"; st.textContent = "결과를 불러오는 중입니다."; }
+  else if (!editing){ st.className = "status"; st.textContent = filled ? `${rGrade}학년 ${ev.name} · ${filled}/${n}개 반 결과 입력됨` : `${rGrade}학년 ${ev.name} 결과가 아직 없습니다.`; }
+  const ready = canWrite && dbState === "ready";
+  adminControls(document.getElementById("admin-box"), st, "관리자 모드가 켜졌습니다. '결과 입력'으로 순위를 넣을 수 있습니다.");
+  // 줄다리기는 대진표에서 승패를 표시하면 자동으로 들어옴
+  document.getElementById("r-actions").hidden = !(ready && isAdmin) || rEvent === "tug";
+  document.getElementById("r-edit").textContent = editing ? "취소" : "결과 입력";
+  document.getElementById("r-save").hidden = !editing;
+  document.getElementById("r-hint").innerHTML = rEvent === "tug"
+    ? `줄다리기 순위는 <a href="#bracket">줄다리기 대진표</a>에서 이긴 반을 표시하면 자동으로 들어옵니다. 결승·3·4위전에 오르지 못한 반은 5위 이하입니다.`
+    : editing
+    ? (ev.record ? `기록을 입력하면 ${ev.record.type==="time" ? "시간이 빠른" : "횟수가 많은"} 순서로 순위와 점수가 바로 계산됩니다. 기록이 같으면 같은 순위가 됩니다. 다 입력한 뒤 '저장'을 눌러 주세요.` : "결승선 통과한 순서대로 순위를 입력하세요.")
+    : "";
+}
+function esc(s){ const d = document.createElement("div"); d.textContent = String(s); return d.innerHTML; }
+
+// 기록 문자열: 시간 "분:초" (예 "1:32.40"), 횟수 "58"
+function parseRecord(s){
+  s = String(s ?? "").trim(); if (!s) return null;
+  const parts = s.replace(/[^\d:.]/g, "").split(":").map(Number);
+  if (!parts.length || parts.some(isNaN)) return null;
+  return parts.reduce((a,v) => a*60 + v, 0);
+}
+function fmtRecord(ev, raw){
+  const v = parseRecord(raw); if (v === null) return String(raw);
+  if (ev.record.type === "count") return `${v}회`;
+  const m = Math.floor(v / 60), sec = (v % 60).toFixed(2).replace(/\.?0+$/, "");
+  return m ? (sec === "0" ? `${m}분` : `${m}분 ${sec}초`) : `${sec}초`;
+}
+// 편집 중인 기록 칸에서 값 읽기 (빈 칸은 null)
+function readInput(ev, c){
+  if (ev.record.type === "count"){
+    const t = document.getElementById(`cnt-${c}`).value.trim();
+    return t === "" ? null : {v: Math.max(0, Math.floor(+t)), raw: String(Math.max(0, Math.floor(+t)))};
+  }
+  const mt = document.getElementById(`min-${c}`).value.trim(), st = document.getElementById(`sec-${c}`).value.trim();
+  if (mt === "" && st === "") return null;
+  const m = Math.max(0, Math.floor(+mt || 0)), sec = Math.max(0, +st || 0);
+  const v = m * 60 + sec;
+  return {v, raw: `${Math.floor(v/60)}:${(v%60).toFixed(2).padStart(5,"0")}`};
+}
+let liveRanks = {}, liveRecords = {};
+function autoRank(){
+  const ev = EVENTS.find(e => e.key === rEvent), n = GRADES[rGrade];
+  const list = [];
+  liveRanks = {}; liveRecords = {};
+  for (let c=1;c<=n;c++){ const x = readInput(ev, c); if (x){ list.push({c, v:x.v}); liveRecords[c] = x.raw; } }
+  list.sort((a,b) => ev.record.type === "time" ? a.v - b.v : b.v - a.v);
+  list.forEach((it,i) => { liveRanks[it.c] = i > 0 && it.v === list[i-1].v ? liveRanks[list[i-1].c] : i + 1; });
+  for (let c=1;c<=n;c++){
+    const r = liveRanks[c];
+    document.getElementById(`rank-${c}`).innerHTML = r ? `<span class="medal${r<=3?" r"+r:""}">${r}</span>` : `<span class="empty">-</span>`;
+    document.getElementById(`pt-${c}`).textContent = r ? pointsFor(rEvent, r) : "-";
+  }
+}
+document.getElementById("r-edit").onclick = () => { editing = !editing; renderResults(); };
+document.getElementById("r-save").onclick = async () => {
+  const ev = EVENTS.find(e => e.key === rEvent), n = GRADES[rGrade];
+  let ranks = {}, records = {};
+  if (ev.record){ autoRank(); ranks = {...liveRanks}; records = {...liveRecords}; }
+  else for (let c=1;c<=n;c++){ const r = +document.getElementById(`rank-${c}`).value; if (r) ranks[c] = r; }
+  const btn = document.getElementById("r-save"), st = document.getElementById("r-status");
+  btn.disabled = true; st.className = "status"; st.textContent = "저장하는 중입니다.";
+  try{
+    await db.collection("results").doc(docId(rGrade, rEvent)).set({ranks, records, updatedAt: new Date().toISOString()});
+    editing = false; renderResults();
+    st.className = "status ok"; st.textContent = "저장했습니다. 종합 점수에도 바로 반영됩니다.";
+  }catch(err){
+    st.className = "status err";
+    st.textContent = err?.code === "invalid_argument" ? "이 계정에는 결과 입력 권한이 없습니다. 페이지 주인에게 편집 권한을 요청해 주세요." : "저장하지 못했습니다. 잠시 뒤 다시 눌러 주세요.";
+    if (err?.code === "invalid_argument"){ canWrite = false; editing = false; renderResults(); }
+  }finally{ btn.disabled = false; }
+};
+
+/* ---------- 종합 점수 화면 ---------- */
+let sGrade = 0;
+function renderStandings(){
+  chipRow(document.getElementById("s-grade"), [{value:0,label:"전체 학년"}, ...gradeItems], sGrade, g => { sGrade = g; renderStandings(); });
+  const banner = document.getElementById("s-banner");
+  banner.hidden = dbState === "ready";
+  banner.textContent = dbState === "off" ? "결과 저장소에 연결되지 않아 점수를 표시할 수 없습니다. 인터넷 연결을 확인하거나 잠시 뒤 새로고침해 주세요." : "점수를 불러오는 중입니다.";
+  const board = document.getElementById("board");
+  board.innerHTML = "";
+  for (const g of (sGrade ? [sGrade] : [1,2,3])){
+    const {rows, entered} = standings(g);
+    const topCount = g === 3 ? 5 : 4; // 1·2학년 4위, 3학년 5위까지 상단 표시
+    const block = document.createElement("div"); block.className = "grade-block";
+    const started = entered > 0;
+    const pods = started ? rows.slice(0, topCount).map((r,i) => `
+      <div class="pod${i===0?" first":""}"><span class="r">${i===0 ? (entered===5?"종합 우승":"현재 1위") : `${i+1}위`}</span>
+      <span class="c" style="color:var(--g${g})">${r.c}반</span><span class="s">${r.total}점</span></div>`).join("") : "";
+    const head = EVENTS.map(e => `<th>${e.name}</th>`).join("");
+    const body = rows.map(r => `<tr class="${started && r.place===1 ? "top" : ""}">
+      <td>${started ? `<span class="medal${r.place<=3?" r"+r.place:""}">${r.place}</span>` : "-"}</td><th>${r.c}반</th>
+      ${EVENTS.map(e => { const x = r.per[e.key]; return `<td>${x.p ?? '<span class="empty">-</span>'}${x.rank ? `<br><span class="note">${rankLabel(e.key,x.rank)}</span>` : ""}</td>`; }).join("")}
+      <td class="pt">${r.total}</td></tr>`).join("");
+    block.innerHTML = `
+      <div class="grade-head"><h3 style="color:var(--g${g})">${g}학년</h3><span class="progress">${GRADES[g]}개 반 · ${entered}/5 종목 집계${entered===5?" · 최종":""}</span></div>
+      ${started ? `<div class="podium-row">${pods}</div>` : `<div class="banner">${g}학년은 아직 집계된 종목이 없습니다. 종목별 결과가 입력되면 순위가 나타납니다.</div>`}
+      <div class="tbl-scroll"><table><thead><tr><th>순위</th><th>학급</th>${head}<th>총점</th></tr></thead><tbody>${body}</tbody></table></div>`;
+    board.appendChild(block);
+  }
+}
+
+/* ---------- 날씨 (info/weather 문서, 관리자 입력) ---------- */
+let weather = null;
+const WX_ICONS = {
+  "맑음":'<circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/>',
+  "구름 조금":'<circle cx="8" cy="8" r="3.5"/><path d="M8 1.5v1.5M1.5 8H3M3.4 3.4l1 1M12.6 3.4l-1 1"/><path d="M9 20h9a4 4 0 0 0 0-8 5.5 5.5 0 0 0-10.4 1.6A3.3 3.3 0 0 0 9 20z"/>',
+  "구름 많음":'<path d="M7 19h10a4.5 4.5 0 0 0 .4-9A6 6 0 0 0 6 11.2 4 4 0 0 0 7 19z"/>',
+  "흐림":'<path d="M7 17h10a4.5 4.5 0 0 0 .4-9A6 6 0 0 0 6 9.2 4 4 0 0 0 7 17z"/><path d="M5 21h14"/>',
+  "비":'<path d="M7 14h10a4.5 4.5 0 0 0 .4-9A6 6 0 0 0 6 6.2 4 4 0 0 0 7 14z"/><path d="M8 17l-1 3M12 17l-1 3M16 17l-1 3"/>',
+  "눈":'<path d="M7 14h10a4.5 4.5 0 0 0 .4-9A6 6 0 0 0 6 6.2 4 4 0 0 0 7 14z"/><path d="M8 18h.01M12 20h.01M16 18h.01M10 22h.01M14 22h.01"/>',
+};
+let wxOpen = false;
+function renderWeather(){
+  const w = weather;
+  const sky = w?.sky || "";
+  document.getElementById("wx-icon").innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${WX_ICONS[sky] || WX_ICONS["구름 조금"]}</svg>`;
+  document.getElementById("wx-icon").style.color = sky === "맑음" ? "#e0a01a" : (sky === "비" || sky === "눈") ? "var(--track)" : "var(--muted)";
+  document.getElementById("wx-sky").textContent = sky || "아직 입력 전";
+  document.getElementById("wx-temp").textContent = (w && w.temp !== null && w.temp !== undefined && w.temp !== "") ? `${w.temp}℃` : "";
+  let note = "행사 당일 아침에 날씨가 올라옵니다.";
+  if (w?.updatedAt){
+    const d = new Date(w.updatedAt);
+    note = `${w.note ? w.note + " · " : ""}${d.getMonth()+1}월 ${d.getDate()}일 ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")} 기준`;
+  }
+  document.getElementById("wx-note").textContent = note;
+  const editable = isAdmin && canWrite && dbState === "ready";
+  document.getElementById("wx-edit").hidden = !editable || wxOpen;
+  document.getElementById("wx-form").hidden = !(editable && wxOpen);
+}
+document.getElementById("wx-edit").onclick = () => {
+  wxOpen = true;
+  document.getElementById("wx-sky-in").value = weather?.sky || "맑음";
+  document.getElementById("wx-temp-in").value = weather?.temp ?? "";
+  document.getElementById("wx-note-in").value = weather?.note || "";
+  renderWeather();
+};
+document.getElementById("wx-cancel").onclick = () => { wxOpen = false; renderWeather(); };
+document.getElementById("wx-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const t = document.getElementById("wx-temp-in").value.trim();
+  const next = {sky: document.getElementById("wx-sky-in").value, temp: t === "" ? null : Math.round(+t * 10) / 10,
+    note: document.getElementById("wx-note-in").value.trim().slice(0,60), updatedAt: new Date().toISOString()};
+  try{ await db.collection("info").doc("weather").set(next); weather = next; wxOpen = false; }
+  catch{ document.getElementById("wx-note").textContent = "날씨를 저장하지 못했습니다. 잠시 뒤 다시 눌러 주세요."; return; }
+  renderWeather();
+});
+
+/* ---------- 줄다리기 대진표 ---------- */
+// brackets/g{학년} = { slots:{ "추첨번호": 반 }, winners:{ 경기id: "a"|"b" } }
+const brackets = {};
+let bGrade = 1, drawOpen = false;
+const S = k => ({slot:k}), W = id => ({win:id}), L = id => ({lose:id});
+function bracketMatches(n){
+  const m = [];
+  if (n === 9) m.push({id:"p", title:"예선", a:S(5), b:S(6)});
+  m.push({id:"q1", title:"8강 1경기", a:S(1), b:S(2)});
+  m.push({id:"q2", title:"8강 2경기", a:S(3), b:S(4)});
+  m.push(n === 9 ? {id:"q3", title:"8강 3경기", a:W("p"), b:S(7)} : {id:"q3", title:"8강 3경기", a:S(5), b:S(6)});
+  m.push(n === 9 ? {id:"q4", title:"8강 4경기", a:S(8), b:S(9)} : {id:"q4", title:"8강 4경기", a:S(7), b:S(8)});
+  m.push({id:"s1", title:"4강 1경기", a:W("q1"), b:W("q2")});
+  m.push({id:"s2", title:"4강 2경기", a:W("q3"), b:W("q4")});
+  m.push({id:"f", title:"결승", a:W("s1"), b:W("s2")});
+  m.push({id:"t", title:"3·4위전", a:L("s1"), b:L("s2")});
+  return m;
+}
+function resolveBracket(g, data){
+  const b = data || brackets["g" + g] || {}, slots = b.slots || {}, winners = b.winners || {};
+  const res = {};
+  for (const m of bracketMatches(GRADES[g])){
+    const side = r => r.slot ? (+slots[r.slot] || null) : r.win ? res[r.win].winner : res[r.lose].loser;
+    const a = side(m.a), bb = side(m.b), w = winners[m.id];
+    const ok = a && bb && (w === "a" || w === "b");
+    res[m.id] = {m, a, b:bb, w: ok ? w : null, winner: ok ? (w === "a" ? a : bb) : null, loser: ok ? (w === "a" ? bb : a) : null};
+  }
+  return res;
+}
+function bracketRanks(res){
+  const ranks = {};
+  for (const id of ["p","q1","q2","q3","q4"]) if (res[id]?.loser) ranks[res[id].loser] = 5;
+  if (res.f.winner){ ranks[res.f.winner] = 1; ranks[res.f.loser] = 2; }
+  if (res.t.winner){ ranks[res.t.winner] = 3; ranks[res.t.loser] = 4; }
+  return ranks;
+}
+function refLabel(r){
+  if (r.slot) return `추첨 ${r.slot}번`;
+  const names = {p:"예선", q1:"8강 1", q2:"8강 2", q3:"8강 3", q4:"8강 4", s1:"4강 1", s2:"4강 2"};
+  return `${names[r.win || r.lose]} ${r.win ? "승자" : "패자"}`;
+}
+function renderBracket(){
+  chipRow(document.getElementById("b-grade"), gradeItems, bGrade, g => { bGrade = g; drawOpen = false; renderBracket(); });
+  const n = GRADES[bGrade], data = brackets["g" + bGrade] || {}, slots = data.slots || {};
+  const res = resolveBracket(bGrade);
+  const st = document.getElementById("b-status");
+  const drawn = Object.values(slots).filter(Boolean).length;
+  const editable = isAdmin && canWrite && dbState === "ready";
+  if (dbState === "off"){ st.className = "status err"; st.textContent = "결과 저장소에 연결되지 않아 대진표를 불러올 수 없습니다. 인터넷 연결을 확인하거나 잠시 뒤 새로고침해 주세요."; }
+  else if (dbState === "loading"){ st.className = "status"; st.textContent = "대진표를 불러오는 중입니다."; }
+  else if (!st.dataset.keep){ st.className = "status"; st.textContent = drawn === n ? `${bGrade}학년 추첨 완료` : drawn ? `${bGrade}학년 추첨 ${drawn}/${n}개 반 입력됨` : `${bGrade}학년은 아직 추첨 전입니다.`; }
+  delete st.dataset.keep;
+  adminControls(document.getElementById("b-admin"), st, "관리자 모드가 켜졌습니다. 추첨 결과를 넣고 이긴 반을 누르세요.");
+  document.getElementById("b-actions").hidden = !editable;
+  document.getElementById("b-draw-btn").textContent = drawOpen ? "추첨 입력 닫기" : (drawn ? "추첨 결과 고치기" : "추첨 결과 입력");
+  // 추첨 입력
+  const form = document.getElementById("b-draw");
+  form.hidden = !(editable && drawOpen);
+  if (!form.hidden){
+    const grid = document.getElementById("b-draw-grid");
+    grid.innerHTML = "";
+    for (let k = 1; k <= n; k++){
+      const opts = [`<option value="">-</option>`].concat(Array.from({length:n}, (_, i) => `<option value="${i+1}">${i+1}반</option>`)).join("");
+      grid.insertAdjacentHTML("beforeend", `<label for="draw-${k}"><span class="no">${k}번</span><select id="draw-${k}">${opts}</select></label>`);
+      document.getElementById(`draw-${k}`).value = slots[k] ? String(slots[k]) : "";
+    }
+  }
+  // 대진표
+  const cols = (n === 9 ? [{t:"예선", ids:["p"]}] : []).concat([
+    {t:"8강", ids:["q1","q2","q3","q4"]}, {t:"4강", ids:["s1","s2"]}, {t:"결승 · 3·4위전", ids:["f","t"]}]);
+  const box = document.getElementById("bracket");
+  box.innerHTML = cols.map(c => `<div class="round"><h4>${c.t}</h4><div class="games">${c.ids.map(id => {
+    const r = res[id], m = r.m, can = editable && r.a && r.b;
+    const team = (side, ref, cls) => {
+      const st = r.w ? (r.w === side ? " win" : " lose") : "";
+      const no = ref.slot ? `<span class="no">${ref.slot}</span>` : `<span class="no"></span>`;
+      const nm = cls ? `<span class="nm">${cls}반</span>` : `<span class="nm tbd">${refLabel(ref)}</span>`;
+      const ck = r.w === side ? `<span class="ck">승</span>` : "";
+      return can ? `<button type="button" class="team pick${st}" data-m="${id}" data-s="${side}" aria-label="${m.title} ${cls}반 승리로 표시">${no}${nm}${ck}</button>`
+                 : `<div class="team${st}">${no}${nm}${ck}</div>`;
+    };
+    return `<div class="match${id === "f" ? " final" : ""}"><div class="mt"><span>${m.title}</span>${r.winner ? `<span>${r.winner}반 승</span>` : ""}</div>${team("a", m.a, r.a)}${team("b", m.b, r.b)}</div>`;
+  }).join("")}</div></div>`).join("");
+  box.querySelectorAll(".team.pick").forEach(btn => btn.onclick = () => setWinner(btn.dataset.m, btn.dataset.s));
+  // 순위 요약
+  const ranks = bracketRanks(res);
+  const order = Object.entries(ranks).sort((x,y) => x[1] - y[1] || x[0] - y[0]);
+  document.getElementById("b-ranks").innerHTML = order.length
+    ? order.map(([c, r]) => `<span class="tag">${rankLabel("tug", r)} · ${c}반 · ${pointsFor("tug", r)}점</span>`).join("") : "";
+  document.getElementById("b-hint").textContent = editable
+    ? (drawn < n ? "먼저 '추첨 결과 입력'으로 추첨 번호마다 반을 넣어 주세요." : "경기가 끝나면 이긴 반을 누르세요. 다시 누르면 표시가 지워집니다. 결과는 종목별 결과와 종합 점수에 바로 반영됩니다.")
+    : "";
+}
+async function saveBracket(next, msg){
+  const st = document.getElementById("b-status");
+  st.className = "status"; st.textContent = "저장하는 중입니다.";
+  try{
+    await db.collection("brackets").doc("g" + bGrade).set({...next, updatedAt: new Date().toISOString()});
+    const ranks = bracketRanks(resolveBracket(bGrade, next));
+    await db.collection("results").doc(docId(bGrade, "tug")).set({ranks, records:{}, from:"bracket", updatedAt: new Date().toISOString()});
+    st.className = "status ok"; st.textContent = msg; st.dataset.keep = "1";
+  }catch(err){
+    st.className = "status err"; st.dataset.keep = "1";
+    st.textContent = err?.code === "invalid_argument" ? "이 계정에는 입력 권한이 없습니다." : "저장하지 못했습니다. 잠시 뒤 다시 눌러 주세요.";
+  }
+  renderBracket();
+}
+function setWinner(id, side){
+  const data = brackets["g" + bGrade] || {};
+  const winners = {...(data.winners || {})};
+  if (winners[id] === side) delete winners[id]; else winners[id] = side;
+  // 앞 경기 승패가 바뀌어 대진이 달라진 뒤 경기의 승패는 지움
+  const before = resolveBracket(bGrade);
+  const after = resolveBracket(bGrade, {slots: data.slots || {}, winners});
+  for (const k of Object.keys(winners)) if (k !== id && (after[k].a !== before[k].a || after[k].b !== before[k].b)) delete winners[k];
+  saveBracket({slots: data.slots || {}, winners}, "승패를 저장했습니다. 종목별 결과에도 반영됐습니다.");
+}
+document.getElementById("b-draw-btn").onclick = () => { drawOpen = !drawOpen; renderBracket(); };
+document.getElementById("b-draw-cancel").onclick = () => { drawOpen = false; renderBracket(); };
+document.getElementById("b-draw").addEventListener("submit", e => {
+  e.preventDefault();
+  const n = GRADES[bGrade], slots = {}, seen = new Set(), st = document.getElementById("b-status");
+  for (let k = 1; k <= n; k++){
+    const v = +document.getElementById(`draw-${k}`).value;
+    if (!v) continue;
+    if (seen.has(v)){ st.className = "status err"; st.textContent = `${v}반이 두 번 들어갔습니다. 한 번만 고르세요.`; return; }
+    seen.add(v); slots[k] = v;
+  }
+  const data = brackets["g" + bGrade] || {}, old = data.slots || {};
+  const changed = Array.from({length:n}, (_, i) => i + 1).some(k => (+old[k] || 0) !== (slots[k] || 0));
+  drawOpen = false;
+  saveBracket({slots, winners: changed ? {} : (data.winners || {})}, "추첨 결과를 저장했습니다.");
+});
+
+/* ---------- 라우팅 ---------- */
+const VIEWS = ["schedule","events","seats","bracket","results","standings"];
+function route(){
+  const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "schedule";
+  for (const k of VIEWS) document.getElementById("v-" + k).hidden = k !== v;
+  document.querySelectorAll("nav.tabs a").forEach(a => { if (a.getAttribute("href") === "#" + v) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+  document.querySelector("nav.tabs a[aria-current]")?.scrollIntoView({inline:"nearest", block:"nearest"});
+  if (v === "bracket") renderBracket();
+  if (v === "results") renderResults();
+  if (v === "standings") renderStandings();
+}
+addEventListener("hashchange", () => { route(); scrollTo({top:0}); });
+
+function rerenderData(){ renderWeather(); renderSchedule(); if (!document.getElementById("v-bracket").hidden) renderBracket(); if (!document.getElementById("v-results").hidden && !editing) renderResults(); if (!document.getElementById("v-standings").hidden) renderStandings(); }
+
+renderSchedule(); renderEvents(); renderWeather(); route();
+setInterval(renderSchedule, 60000);
+
+/* ---------- Firebase Realtime Database (REST) ---------- */
+// ▼ Firebase 콘솔의 Realtime Database URL. 다른 프로젝트를 쓰려면 이 줄만 바꾸세요.
+const FIREBASE_DB_URL = "https://pefestival-1f904-default-rtdb.asia-southeast1.firebasedatabase.app";
+// 데이터가 저장되는 위치 (results, brackets, info)
+const FIREBASE_PATH = "kwandong-festival-2026";
+const fbUrl = path => `${FIREBASE_DB_URL}/${FIREBASE_PATH}${path ? "/" + path : ""}.json`;
+
+// 숫자 키 객체가 배열로 돌아오는 경우를 객체로 되돌림
+const toObj = x => Array.isArray(x) ? Object.fromEntries(x.map((v,i) => [i, v]).filter(([,v]) => v !== null && v !== undefined)) : (x || {});
+function fixDoc(d){
+  if (!d || typeof d !== "object") return d;
+  const o = {...d};
+  for (const k of ["ranks","records","slots","winners"]) if (k in o) o[k] = toObj(o[k]);
+  return o;
+}
+// 화면 코드가 쓰는 저장 함수: db.collection(이름).doc(id).set(데이터)
+db = {
+  collection: c => ({
+    doc: id => ({
+      set: async data => {
+        const res = await fetch(fbUrl(`${c}/${id}`), {method:"PUT", headers:{"Content-Type":"application/json"}, body: JSON.stringify(data)});
+        if (!res.ok) throw {code: res.status === 401 || res.status === 403 ? "invalid_argument" : "unavailable"};
+        applyLocal(c, id, data);
+      }
+    })
+  })
+};
+function applyLocal(c, id, data){
+  if (c === "results") results[id] = fixDoc(data);
+  if (c === "brackets") brackets[id] = fixDoc(data);
+  if (c === "info" && id === "weather") weather = data;
+  if (c === "info" && id === "live") liveManual = Number.isInteger(data?.index) ? data.index : null;
+  rerenderData();
+}
+function applyTree(tree){
+  tree = tree || {};
+  for (const k of Object.keys(results)) delete results[k];
+  for (const [k,v] of Object.entries(tree.results || {})) results[k] = fixDoc(v);
+  for (const k of Object.keys(brackets)) delete brackets[k];
+  for (const [k,v] of Object.entries(tree.brackets || {})) brackets[k] = fixDoc(v);
+  weather = tree.info?.weather || null;
+  const li = tree.info?.live?.index;
+  liveManual = Number.isInteger(li) ? li : null;
+}
+let loading = false, reloadAgain = false;
+async function loadAll(){
+  if (loading){ reloadAgain = true; return; }
+  loading = true;
+  try{
+    const res = await fetch(fbUrl("") + "?t=" + Date.now(), {cache:"no-store"});
+    if (!res.ok) throw new Error(res.status);
+    applyTree(await res.json());
+    dbState = "ready"; canWrite = true;
+  }catch{
+    if (dbState !== "ready") dbState = "off";
+  }finally{
+    loading = false;
+    if (!editing && !drawOpen && !wxOpen) rerenderData();
+    if (reloadAgain){ reloadAgain = false; loadAll(); }
+  }
+}
+// 다른 기기에서 바뀐 내용을 바로 받기 (Firebase 실시간 스트림), 안 되면 15초마다 새로 읽기
+function listen(){
+  let timer = null;
+  const soon = () => { clearTimeout(timer); timer = setTimeout(loadAll, 250); };
+  try{
+    const es = new EventSource(fbUrl(""));
+    es.addEventListener("put", soon);
+    es.addEventListener("patch", soon);
+  }catch{}
+  setInterval(loadAll, 15000);
+}
+loadAll(); listen();
+</script>
+
+</body>
+</html>
