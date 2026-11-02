@@ -109,13 +109,20 @@ details[open] .chev{transform:rotate(180deg)}
 
 /* 자리 배치 */
 .map-scroll{overflow-x:auto}
-.map{min-width:520px;display:grid;grid-template-columns:.73fr 1.5fr .93fr .51fr .96fr .73fr;grid-template-rows:.6fr .68fr 1.13fr 1.15fr 1.37fr .76fr;
+.map{min-width:640px;display:grid;grid-template-columns:.73fr 1.5fr .93fr .51fr .96fr .73fr;grid-template-rows:.6fr .9fr 1.13fr 1.05fr 1.37fr .95fr;
   gap:4px;background:var(--line);border:4px solid var(--line);border-radius:12px;aspect-ratio:1.35/1;max-width:100%}
 .map>div{background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:13px;color:var(--muted);padding:4px;line-height:1.35}
 .map .ground{background:#c8e6b0;color:#2d5a1e;font-family:var(--f-display);font-size:34px;position:relative}
 .map .ground::after{content:"";position:absolute;inset:16px;border:9px solid #1d1d1d;border-radius:999px}
 .map .zone{color:var(--fg);font-weight:700;cursor:pointer;border:0;font:inherit;font-weight:700}
 .map .zone small{font-weight:400;display:block}
+.map .zone{display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:5px;text-align:center}
+.map .zone .zl{font-size:12px;line-height:1.2}
+.map .zone .cells{flex:1;display:grid;gap:3px}
+.map .zone .cell{display:flex;align-items:center;justify-content:center;background:var(--surface);border-radius:4px;font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--fg);min-height:22px;padding:0 1px}
+.map .z1 .cell{box-shadow:inset 0 0 0 1px var(--g1)}
+.map .z2 .cell{box-shadow:inset 0 0 0 1px var(--g2)}
+.map .z3 .cell{box-shadow:inset 0 0 0 1px var(--g3)}
 .map .z1{background:var(--g1-soft);box-shadow:inset 0 0 0 2px var(--g1)}
 .map .z2{background:var(--g2-soft);box-shadow:inset 0 0 0 2px var(--g2)}
 .map .z3{background:var(--g3-soft);box-shadow:inset 0 0 0 2px var(--g3)}
@@ -322,24 +329,24 @@ footer .wrap{padding-block:18px}
       <div style="grid-column:2/5;grid-row:1">나무</div>
       <div style="grid-column:5;grid-row:1">캐노피</div>
       <div style="grid-column:6;grid-row:1">체육 교구실</div>
-      <button class="zone z3" data-g="3" style="grid-column:2/6;grid-row:2">3학년<small>천막 (9학급)</small></button>
+      <button class="zone z3" data-g="3" style="grid-column:2/6;grid-row:2" aria-label="3학년 천막, 왼쪽부터 3-1반부터 3-9반"><span class="zl">3학년 천막</span><span class="cells" style="grid-template-columns:repeat(9,1fr)"><span class="cell">3-1</span><span class="cell">3-2</span><span class="cell">3-3</span><span class="cell">3-4</span><span class="cell">3-5</span><span class="cell">3-6</span><span class="cell">3-7</span><span class="cell">3-8</span><span class="cell">3-9</span></span></button>
       <div style="grid-column:6;grid-row:2/4"></div>
       <div class="ground" style="grid-column:2/6;grid-row:3/6">운동장</div>
       <div style="grid-column:1;grid-row:4">축구 골대</div>
       <div style="grid-column:6;grid-row:4">축구 골대</div>
-      <button class="zone z1" data-g="1" style="grid-column:1;grid-row:5">1학년<small>천막 (2학급)</small></button>
-      <button class="zone z2" data-g="2" style="grid-column:6;grid-row:5">2학년<small>천막 (2학급)</small></button>
+      <button class="zone z1" data-g="1" style="grid-column:1;grid-row:5" aria-label="1학년 천막, 골대 쪽 1-6반, 스탠드 쪽 1-4반"><span class="zl">1학년 천막</span><span class="cells" style="grid-template-rows:repeat(2,1fr)"><span class="cell">1-6</span><span class="cell">1-4</span></span></button>
+      <button class="zone z2" data-g="2" style="grid-column:6;grid-row:5" aria-label="2학년 천막, 골대 쪽 2-1반, 스탠드 쪽 2-7반"><span class="zl">2학년 천막</span><span class="cells" style="grid-template-rows:repeat(2,1fr)"><span class="cell">2-1</span><span class="cell">2-7</span></span></button>
       <div style="grid-column:1;grid-row:6"></div>
-      <button class="zone z1" data-g="1" style="grid-column:2;grid-row:6">1학년<small>스탠드 (6학급)</small></button>
+      <button class="zone z1" data-g="1" style="grid-column:2;grid-row:6" aria-label="1학년 스탠드, 왼쪽부터 1-1, 1-2, 1-7, 1-5, 1-3, 1-8반"><span class="zl">1학년 스탠드</span><span class="cells" style="grid-template-columns:repeat(6,1fr)"><span class="cell">1-1</span><span class="cell">1-2</span><span class="cell">1-7</span><span class="cell">1-5</span><span class="cell">1-3</span><span class="cell">1-8</span></span></button>
       <div class="podium" style="grid-column:3;grid-row:6">조례대<small style="font-weight:400">본부</small></div>
-      <button class="zone z2" data-g="2" style="grid-column:4/6;grid-row:6">2학년<small>스탠드 (6학급)</small></button>
+      <button class="zone z2" data-g="2" style="grid-column:4/6;grid-row:6" aria-label="2학년 스탠드, 왼쪽부터 2-5, 2-2, 2-4, 2-6, 2-3, 2-8반"><span class="zl">2학년 스탠드</span><span class="cells" style="grid-template-columns:repeat(6,1fr)"><span class="cell">2-5</span><span class="cell">2-2</span><span class="cell">2-4</span><span class="cell">2-6</span><span class="cell">2-3</span><span class="cell">2-8</span></span></button>
       <div style="grid-column:6;grid-row:6"></div>
     </div>
   </div>
   <div class="facts">
-    <div class="fact"><dt>1학년</dt><dd>조례대 왼쪽 스탠드 6학급, 왼쪽 축구 골대 옆 천막 2학급</dd></div>
-    <div class="fact"><dt>2학년</dt><dd>조례대 오른쪽 스탠드 6학급, 오른쪽 축구 골대 옆 천막 2학급</dd></div>
-    <div class="fact"><dt>3학년</dt><dd>나무 쪽 긴 천막에 9학급 모두</dd></div>
+    <div class="fact"><dt>1학년</dt><dd>스탠드(조례대 왼쪽): 왼쪽부터 1-1, 1-2, 1-7, 1-5, 1-3, 1-8<br>천막(왼쪽 골대 옆): 스탠드 쪽 1-4, 골대 쪽 1-6</dd></div>
+    <div class="fact"><dt>2학년</dt><dd>스탠드(조례대 오른쪽): 왼쪽부터 2-5, 2-2, 2-4, 2-6, 2-3, 2-8<br>천막(오른쪽 골대 옆): 스탠드 쪽 2-7, 골대 쪽 2-1</dd></div>
+    <div class="fact"><dt>3학년</dt><dd>나무 쪽 긴 천막: 조례대에서 바라봤을 때 왼쪽부터 3-1 ~ 3-9</dd></div>
   </div>
 </section>
 
