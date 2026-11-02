@@ -48,7 +48,7 @@ nav.tabs a svg{width:16px;height:16px;flex:none}
 nav.tabs a:hover{background:color-mix(in srgb,var(--tc) 16%,#fff);transform:translateY(-1px)}
 nav.tabs a[aria-current="page"]{background:var(--tc);border-color:var(--tc);color:#fff;box-shadow:0 3px 10px color-mix(in srgb,var(--tc) 35%,transparent)}
 nav.tabs a.t-schedule{--tc:#1f6fd1} nav.tabs a.t-events{--tc:#0e8f80} nav.tabs a.t-seats{--tc:#7a4fc4}
-nav.tabs a.t-bracket{--tc:#2f8a3e} nav.tabs a.t-results{--tc:#dd5f22} nav.tabs a.t-standings{--tc:#cf3358}
+nav.tabs a.t-bracket{--tc:#2f8a3e} nav.tabs a.t-relay{--tc:#4f5bd5} nav.tabs a.t-results{--tc:#dd5f22} nav.tabs a.t-standings{--tc:#cf3358}
 nav.tabs a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--track);outline-offset:2px}
 
 main .wrap{padding-block:24px 56px}
@@ -109,13 +109,20 @@ details[open] .chev{transform:rotate(180deg)}
 
 /* 자리 배치 */
 .map-scroll{overflow-x:auto}
-.map{min-width:520px;display:grid;grid-template-columns:.73fr 1.5fr .93fr .51fr .96fr .73fr;grid-template-rows:.6fr .68fr 1.13fr 1.15fr 1.37fr .76fr;
+.map{min-width:640px;display:grid;grid-template-columns:.73fr 1.5fr .93fr .51fr .96fr .73fr;grid-template-rows:.6fr .9fr 1.13fr 1.05fr 1.37fr .95fr;
   gap:4px;background:var(--line);border:4px solid var(--line);border-radius:12px;aspect-ratio:1.35/1;max-width:100%}
 .map>div{background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:13px;color:var(--muted);padding:4px;line-height:1.35}
 .map .ground{background:#c8e6b0;color:#2d5a1e;font-family:var(--f-display);font-size:34px;position:relative}
 .map .ground::after{content:"";position:absolute;inset:16px;border:9px solid #1d1d1d;border-radius:999px}
 .map .zone{color:var(--fg);font-weight:700;cursor:pointer;border:0;font:inherit;font-weight:700}
 .map .zone small{font-weight:400;display:block}
+.map .zone{display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:5px;text-align:center}
+.map .zone .zl{font-size:12px;line-height:1.2}
+.map .zone .cells{flex:1;display:grid;gap:3px}
+.map .zone .cell{display:flex;align-items:center;justify-content:center;background:var(--surface);border-radius:4px;font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--fg);min-height:22px;padding:0 1px}
+.map .z1 .cell{box-shadow:inset 0 0 0 1px var(--g1)}
+.map .z2 .cell{box-shadow:inset 0 0 0 1px var(--g2)}
+.map .z3 .cell{box-shadow:inset 0 0 0 1px var(--g3)}
 .map .z1{background:var(--g1-soft);box-shadow:inset 0 0 0 2px var(--g1)}
 .map .z2{background:var(--g2-soft);box-shadow:inset 0 0 0 2px var(--g2)}
 .map .z3{background:var(--g3-soft);box-shadow:inset 0 0 0 2px var(--g3)}
@@ -191,6 +198,19 @@ tr.top td,tr.top th{background:color-mix(in srgb,var(--gold) 10%,transparent)}
 .wx-form input,.wx-form select{font:inherit;font-size:14px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);width:100%}
 .wx-form input[type=number]{width:90px}
 
+/* 이어달리기 대진표 */
+.heats{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;align-items:start}
+.heat{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.heat h3{font-size:15px;padding:10px 14px;margin:0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px}
+.heat h3 span{font-size:12px;font-weight:400;color:var(--muted)}
+.heat.final{border-color:var(--gold);box-shadow:inset 0 3px 0 var(--gold)}
+.heat table{width:100%}
+.heat td,.heat th{padding:8px 12px}
+.heat tr.adv td,.heat tr.adv th{background:color-mix(in srgb,#4f5bd5 9%,var(--surface))}
+.heat .lane{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.heat select{font:inherit;font-size:14px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg)}
+.heat .adv-tag{font-size:11px;font-weight:700;color:#4f5bd5}
+
 /* 대진표 */
 .bracket-scroll{overflow-x:auto;padding-bottom:4px}
 .bracket{display:flex;gap:18px;min-width:max-content}
@@ -249,6 +269,7 @@ footer .wrap{padding-block:18px}
     <a class="t-events" href="#events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>종목 안내</a>
     <a class="t-seats" href="#seats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>자리 배치</a>
     <a class="t-bracket" href="#bracket"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h5v5H3M3 14h5v5H3M8 7.5h3v9H8M11 12h4M15 9h6v6h-6z"/></svg>줄다리기 대진표</a>
+    <a class="t-relay" href="#relay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="4" r="2"/><path d="M8 21l3-6 3 2v5M7 11l3-3h4l2 4 3 1M11 8l-2 7"/></svg>이어달리기 대진표</a>
     <a class="t-results" href="#results"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>종목별 결과</a>
     <a class="t-standings" href="#standings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>종합 점수</a>
   </div>
@@ -322,24 +343,24 @@ footer .wrap{padding-block:18px}
       <div style="grid-column:2/5;grid-row:1">나무</div>
       <div style="grid-column:5;grid-row:1">캐노피</div>
       <div style="grid-column:6;grid-row:1">체육 교구실</div>
-      <button class="zone z3" data-g="3" style="grid-column:2/6;grid-row:2">3학년<small>천막 (9학급)</small></button>
+      <button class="zone z3" data-g="3" style="grid-column:2/6;grid-row:2" aria-label="3학년 천막, 왼쪽부터 3-1반부터 3-9반"><span class="zl">3학년 천막</span><span class="cells" style="grid-template-columns:repeat(9,1fr)"><span class="cell">3-1</span><span class="cell">3-2</span><span class="cell">3-3</span><span class="cell">3-4</span><span class="cell">3-5</span><span class="cell">3-6</span><span class="cell">3-7</span><span class="cell">3-8</span><span class="cell">3-9</span></span></button>
       <div style="grid-column:6;grid-row:2/4"></div>
       <div class="ground" style="grid-column:2/6;grid-row:3/6">운동장</div>
       <div style="grid-column:1;grid-row:4">축구 골대</div>
       <div style="grid-column:6;grid-row:4">축구 골대</div>
-      <button class="zone z1" data-g="1" style="grid-column:1;grid-row:5">1학년<small>천막 (2학급)</small></button>
-      <button class="zone z2" data-g="2" style="grid-column:6;grid-row:5">2학년<small>천막 (2학급)</small></button>
+      <button class="zone z1" data-g="1" style="grid-column:1;grid-row:5" aria-label="1학년 천막, 골대 쪽 1-6반, 스탠드 쪽 1-4반"><span class="zl">1학년 천막</span><span class="cells" style="grid-template-rows:repeat(2,1fr)"><span class="cell">1-6</span><span class="cell">1-4</span></span></button>
+      <button class="zone z2" data-g="2" style="grid-column:6;grid-row:5" aria-label="2학년 천막, 골대 쪽 2-1반, 스탠드 쪽 2-7반"><span class="zl">2학년 천막</span><span class="cells" style="grid-template-rows:repeat(2,1fr)"><span class="cell">2-1</span><span class="cell">2-7</span></span></button>
       <div style="grid-column:1;grid-row:6"></div>
-      <button class="zone z1" data-g="1" style="grid-column:2;grid-row:6">1학년<small>스탠드 (6학급)</small></button>
+      <button class="zone z1" data-g="1" style="grid-column:2;grid-row:6" aria-label="1학년 스탠드, 왼쪽부터 1-1, 1-2, 1-7, 1-5, 1-3, 1-8반"><span class="zl">1학년 스탠드</span><span class="cells" style="grid-template-columns:repeat(6,1fr)"><span class="cell">1-1</span><span class="cell">1-2</span><span class="cell">1-7</span><span class="cell">1-5</span><span class="cell">1-3</span><span class="cell">1-8</span></span></button>
       <div class="podium" style="grid-column:3;grid-row:6">조례대<small style="font-weight:400">본부</small></div>
-      <button class="zone z2" data-g="2" style="grid-column:4/6;grid-row:6">2학년<small>스탠드 (6학급)</small></button>
+      <button class="zone z2" data-g="2" style="grid-column:4/6;grid-row:6" aria-label="2학년 스탠드, 왼쪽부터 2-5, 2-2, 2-4, 2-6, 2-3, 2-8반"><span class="zl">2학년 스탠드</span><span class="cells" style="grid-template-columns:repeat(6,1fr)"><span class="cell">2-5</span><span class="cell">2-2</span><span class="cell">2-4</span><span class="cell">2-6</span><span class="cell">2-3</span><span class="cell">2-8</span></span></button>
       <div style="grid-column:6;grid-row:6"></div>
     </div>
   </div>
   <div class="facts">
-    <div class="fact"><dt>1학년</dt><dd>조례대 왼쪽 스탠드 6학급, 왼쪽 축구 골대 옆 천막 2학급</dd></div>
-    <div class="fact"><dt>2학년</dt><dd>조례대 오른쪽 스탠드 6학급, 오른쪽 축구 골대 옆 천막 2학급</dd></div>
-    <div class="fact"><dt>3학년</dt><dd>나무 쪽 긴 천막에 9학급 모두</dd></div>
+    <div class="fact"><dt>1학년</dt><dd>스탠드(조례대 왼쪽): 왼쪽부터 1-1, 1-2, 1-7, 1-5, 1-3, 1-8<br>천막(왼쪽 골대 옆): 스탠드 쪽 1-4, 골대 쪽 1-6</dd></div>
+    <div class="fact"><dt>2학년</dt><dd>스탠드(조례대 오른쪽): 왼쪽부터 2-5, 2-2, 2-4, 2-6, 2-3, 2-8<br>천막(오른쪽 골대 옆): 스탠드 쪽 2-7, 골대 쪽 2-1</dd></div>
+    <div class="fact"><dt>3학년</dt><dd>나무 쪽 긴 천막: 조례대에서 바라봤을 때 왼쪽부터 3-1 ~ 3-9</dd></div>
   </div>
 </section>
 
@@ -364,6 +385,24 @@ footer .wrap{padding-block:18px}
   <div class="bracket-scroll"><div class="bracket" id="bracket"></div></div>
   <div class="result-line" id="b-ranks"></div>
   <p class="note" id="b-hint"></p>
+</section>
+
+<!-- 이어달리기 대진표 -->
+<section class="view" id="v-relay" hidden>
+  <div><h2>이어달리기 대진표</h2><p class="lead">학년별로 예선 두 경기를 치르고, 각 예선 1·2위 반이 결승에 올라갑니다. 결승 1~4위가 정해지면 종목별 결과와 종합 점수에 바로 반영되고, 결승에 오르지 못한 반은 5위 이하입니다.</p></div>
+  <div class="chips" id="rl-grade"></div>
+  <div class="toolbar">
+    <div class="status" id="rl-status"></div>
+    <div class="admin">
+      <div class="admin" id="rl-admin"></div>
+      <div class="chips" id="rl-actions" hidden>
+        <button class="btn ghost" type="button" id="rl-edit">순위 입력</button>
+        <button class="btn" type="button" id="rl-save" hidden>저장</button>
+      </div>
+    </div>
+  </div>
+  <div class="heats" id="rl-heats"></div>
+  <p class="note" id="rl-hint"></p>
 </section>
 
 <!-- 종목별 결과 -->
@@ -602,6 +641,7 @@ function adminControls(el, statusEl, onUnlockMsg){
   });
 }
 function rerenderAdminViews(){
+  if (!document.getElementById("v-relay").hidden) renderRelay();
   renderWeather();
   if (!document.getElementById("v-schedule").hidden) renderSchedule();
   if (!document.getElementById("v-results").hidden) renderResults();
@@ -678,11 +718,13 @@ function renderResults(){
   const ready = canWrite && dbState === "ready";
   adminControls(document.getElementById("admin-box"), st, "관리자 모드가 켜졌습니다. '결과 입력'으로 순위를 넣을 수 있습니다.");
   // 줄다리기는 대진표에서 승패를 표시하면 자동으로 들어옴
-  document.getElementById("r-actions").hidden = !(ready && isAdmin) || rEvent === "tug";
+  document.getElementById("r-actions").hidden = !(ready && isAdmin) || rEvent === "tug" || rEvent === "relay";
   document.getElementById("r-edit").textContent = editing ? "취소" : "결과 입력";
   document.getElementById("r-save").hidden = !editing;
   document.getElementById("r-hint").innerHTML = rEvent === "tug"
     ? `줄다리기 순위는 <a href="#bracket">줄다리기 대진표</a>에서 이긴 반을 표시하면 자동으로 들어옵니다. 결승·3·4위전에 오르지 못한 반은 5위 이하입니다.`
+    : rEvent === "relay"
+    ? `이어달리기 순위는 <a href="#relay">이어달리기 대진표</a>에서 예선과 결승 순위를 입력하면 자동으로 들어옵니다. 결승에 오르지 못한 반은 5위 이하입니다.`
     : editing
     ? (ev.record ? `기록을 입력하면 ${ev.record.type==="time" ? "시간이 빠른" : "횟수가 많은"} 순서로 순위와 점수가 바로 계산됩니다. 기록이 같으면 같은 순위가 됩니다. 다 입력한 뒤 '저장'을 눌러 주세요.` : "결승선 통과한 순서대로 순위를 입력하세요.")
     : "";
@@ -957,20 +999,124 @@ document.getElementById("b-draw").addEventListener("submit", e => {
   saveBracket({slots, winners: changed ? {} : (data.winners || {})}, "추첨 결과를 저장했습니다.");
 });
 
+/* ---------- 이어달리기 대진표 ---------- */
+// 예선 레인 배정 (반 번호, 1레인부터)
+const RELAY_HEATS = {
+  1: {h1:[5,2,3,4], h2:[1,7,6,8]},
+  2: {h1:[7,1,8,2], h2:[5,4,3,6]},
+  3: {h1:[6,9,8,3], h2:[4,7,5,1,2]},
+};
+const RELAY_ADVANCE = 2; // 각 예선 상위 2반 결승 진출
+// relay/g{학년} = { h1:{반:순위}, h2:{반:순위}, final:{반:순위} }
+const relays = {};
+let rlGrade = 1, rlEditing = false;
+const asObj = x => Array.isArray(x) ? Object.fromEntries(x.map((v,i) => [i, v]).filter(([,v]) => v !== null && v !== undefined)) : (x || {});
+function relayState(g, data){
+  const d = data || relays["g" + g] || {};
+  const h1 = asObj(d.h1), h2 = asObj(d.h2), fin = asObj(d.final);
+  const adv = h => Object.entries(h).filter(([,r]) => +r >= 1 && +r <= RELAY_ADVANCE).sort((a,b) => a[1] - b[1]).map(([c]) => +c);
+  const finalists = [...adv(h1).map((c,i) => ({c, from:`예선 1경기 ${i+1}위`})), ...adv(h2).map((c,i) => ({c, from:`예선 2경기 ${i+1}위`}))];
+  return {h1, h2, fin, finalists};
+}
+function relayRanks(g, st){
+  const ranks = {};
+  const heatsDone = ["h1","h2"].filter(h => Object.keys(st[h]).length);
+  // 예선을 마친 반 중 결승에 못 오른 반은 5위 이하
+  for (const h of heatsDone) for (const c of RELAY_HEATS[g][h]) if (!st.finalists.some(f => f.c === c) && st[h][c]) ranks[c] = 5;
+  for (const f of st.finalists){ const r = +st.fin[f.c]; if (r >= 1 && r <= 4) ranks[f.c] = r; }
+  return ranks;
+}
+function renderRelay(){
+  chipRow(document.getElementById("rl-grade"), gradeItems, rlGrade, g => { rlGrade = g; rlEditing = false; renderRelay(); });
+  const g = rlGrade, st = relayState(g), editable = isAdmin && canWrite && dbState === "ready";
+  const status = document.getElementById("rl-status");
+  if (dbState === "off"){ status.className = "status err"; status.textContent = "결과 저장소에 연결되지 않아 대진표를 불러올 수 없습니다."; }
+  else if (dbState === "loading"){ status.className = "status"; status.textContent = "대진표를 불러오는 중입니다."; }
+  else if (!status.dataset.keep){ status.className = "status"; const done = Object.keys(st.fin).length; status.textContent = done ? `${g}학년 결승 결과가 입력됐습니다.` : `${g}학년 · 예선 ${["h1","h2"].filter(h => Object.keys(st[h]).length).length}/2경기 입력됨`; }
+  delete status.dataset.keep;
+  adminControls(document.getElementById("rl-admin"), status, "관리자 모드가 켜졌습니다. '순위 입력'으로 예선과 결승 순위를 넣으세요.");
+  if (!editable) rlEditing = false;
+  document.getElementById("rl-actions").hidden = !editable;
+  document.getElementById("rl-edit").textContent = rlEditing ? "취소" : "순위 입력";
+  document.getElementById("rl-save").hidden = !rlEditing;
+  const medal = r => r ? `<span class="medal${r<=3?" r"+r:""}">${r}</span>` : `<span class="empty">-</span>`;
+  const sel = (id, max, val) => `<select id="${id}" aria-label="순위"><option value="">-</option>${Array.from({length:max}, (_, i) => `<option value="${i+1}"${+val === i+1 ? " selected" : ""}>${i+1}위</option>`).join("")}</select>`;
+  const heatCard = (h, title) => {
+    const lanes = RELAY_HEATS[g][h];
+    const rows = lanes.map((c, i) => {
+      const r = +st[h][c] || 0, adv = r >= 1 && r <= RELAY_ADVANCE;
+      return `<tr class="${adv ? "adv" : ""}"><td class="lane">${i+1}레인</td><th>${g}-${c}</th><td>${rlEditing ? sel(`rl-${h}-${c}`, lanes.length, r) : medal(r)}</td><td>${adv ? '<span class="adv-tag">결승 진출</span>' : ""}</td></tr>`;
+    }).join("");
+    return `<div class="heat"><h3>${title}<span>${lanes.length}개 반</span></h3><table><thead><tr><th>레인</th><th>학급</th><th>순위</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  };
+  let finalRows;
+  if (st.finalists.length){
+    finalRows = st.finalists.map(f => {
+      const r = +st.fin[f.c] || 0;
+      return `<tr><th>${g}-${f.c}</th><td class="note">${f.from}</td><td>${rlEditing ? sel(`rl-final-${f.c}`, 4, r) : medal(r)}</td><td class="pt">${r ? pointsFor("relay", r) + "점" : ""}</td></tr>`;
+    }).join("");
+  } else finalRows = `<tr><td colspan="4" class="empty">예선 1·2위가 정해지면 결승 진출 반이 나타납니다.</td></tr>`;
+  document.getElementById("rl-heats").innerHTML = heatCard("h1", "예선 1경기") + heatCard("h2", "예선 2경기")
+    + `<div class="heat final"><h3>결승<span>각 예선 1·2위</span></h3><table><thead><tr><th>학급</th><th>진출</th><th>순위</th><th>점수</th></tr></thead><tbody>${finalRows}</tbody></table></div>`;
+  document.getElementById("rl-hint").textContent = rlEditing
+    ? "예선은 들어온 순서대로 1위부터 입력하고 저장하면 결승 진출 반이 정해집니다. 결승 순위는 진출 반이 나타난 뒤 입력하세요."
+    : "";
+}
+document.getElementById("rl-edit").onclick = () => { rlEditing = !rlEditing; renderRelay(); };
+document.getElementById("rl-save").onclick = async () => {
+  const g = rlGrade, st = relayState(g), status = document.getElementById("rl-status");
+  const next = {};
+  for (const h of ["h1","h2"]){
+    const o = {}, seen = new Set();
+    for (const c of RELAY_HEATS[g][h]){
+      const v = +document.getElementById(`rl-${h}-${c}`).value;
+      if (!v) continue;
+      if (seen.has(v)){ status.className = "status err"; status.textContent = `예선 ${h === "h1" ? 1 : 2}경기에 ${v}위가 두 번 들어갔습니다.`; return; }
+      seen.add(v); o[c] = v;
+    }
+    next[h] = o;
+  }
+  // 예선 결과가 바뀌면 결승 진출 반이 달라질 수 있어, 남아 있는 진출 반의 결승 순위만 유지
+  const after = relayState(g, next);
+  const fin = {}, seenF = new Set();
+  for (const f of after.finalists){
+    const el = document.getElementById(`rl-final-${f.c}`);
+    const v = el ? +el.value : 0;
+    if (!v) continue;
+    if (seenF.has(v)){ status.className = "status err"; status.textContent = `결승에 ${v}위가 두 번 들어갔습니다.`; return; }
+    seenF.add(v); fin[f.c] = v;
+  }
+  next.final = fin;
+  const btn = document.getElementById("rl-save");
+  btn.disabled = true; status.className = "status"; status.textContent = "저장하는 중입니다.";
+  try{
+    await db.collection("relay").doc("g" + g).set({...next, updatedAt: new Date().toISOString()});
+    const ranks = relayRanks(g, relayState(g, next));
+    await db.collection("results").doc(docId(g, "relay")).set({ranks, records:{}, from:"relay", updatedAt: new Date().toISOString()});
+    relays["g" + g] = next; rlEditing = false;
+    status.className = "status ok"; status.textContent = "저장했습니다. 종목별 결과와 종합 점수에도 반영됐습니다."; status.dataset.keep = "1";
+  }catch(err){
+    status.className = "status err"; status.dataset.keep = "1";
+    status.textContent = err?.code === "invalid_argument" ? "이 계정에는 입력 권한이 없습니다." : "저장하지 못했습니다. 잠시 뒤 다시 눌러 주세요.";
+  }finally{ btn.disabled = false; }
+  renderRelay();
+};
+
 /* ---------- 라우팅 ---------- */
-const VIEWS = ["schedule","events","seats","bracket","results","standings"];
+const VIEWS = ["schedule","events","seats","bracket","relay","results","standings"];
 function route(){
   const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "schedule";
   for (const k of VIEWS) document.getElementById("v-" + k).hidden = k !== v;
   document.querySelectorAll("nav.tabs a").forEach(a => { if (a.getAttribute("href") === "#" + v) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
   document.querySelector("nav.tabs a[aria-current]")?.scrollIntoView({inline:"nearest", block:"nearest"});
   if (v === "bracket") renderBracket();
+  if (v === "relay") renderRelay();
   if (v === "results") renderResults();
   if (v === "standings") renderStandings();
 }
 addEventListener("hashchange", () => { route(); scrollTo({top:0}); });
 
-function rerenderData(){ renderWeather(); renderSchedule(); if (!document.getElementById("v-bracket").hidden) renderBracket(); if (!document.getElementById("v-results").hidden && !editing) renderResults(); if (!document.getElementById("v-standings").hidden) renderStandings(); }
+function rerenderData(){ renderWeather(); renderSchedule(); if (!document.getElementById("v-relay").hidden && !rlEditing) renderRelay(); if (!document.getElementById("v-bracket").hidden) renderBracket(); if (!document.getElementById("v-results").hidden && !editing) renderResults(); if (!document.getElementById("v-standings").hidden) renderStandings(); }
 
 renderSchedule(); renderEvents(); renderWeather(); route();
 setInterval(renderSchedule, 60000);
@@ -1005,6 +1151,7 @@ db = {
 function applyLocal(c, id, data){
   if (c === "results") results[id] = fixDoc(data);
   if (c === "brackets") brackets[id] = fixDoc(data);
+  if (c === "relay") relays[id] = data;
   if (c === "info" && id === "weather") weather = data;
   if (c === "info" && id === "live") liveManual = Number.isInteger(data?.index) ? data.index : null;
   rerenderData();
@@ -1015,6 +1162,8 @@ function applyTree(tree){
   for (const [k,v] of Object.entries(tree.results || {})) results[k] = fixDoc(v);
   for (const k of Object.keys(brackets)) delete brackets[k];
   for (const [k,v] of Object.entries(tree.brackets || {})) brackets[k] = fixDoc(v);
+  for (const k of Object.keys(relays)) delete relays[k];
+  for (const [k,v] of Object.entries(tree.relay || {})) relays[k] = v;
   weather = tree.info?.weather || null;
   const li = tree.info?.live?.index;
   liveManual = Number.isInteger(li) ? li : null;
@@ -1032,7 +1181,7 @@ async function loadAll(){
     if (dbState !== "ready") dbState = "off";
   }finally{
     loading = false;
-    if (!editing && !drawOpen && !wxOpen) rerenderData();
+    if (!editing && !drawOpen && !wxOpen && !rlEditing) rerenderData();
     if (reloadAgain){ reloadAgain = false; loadAll(); }
   }
 }
