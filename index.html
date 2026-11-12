@@ -779,7 +779,7 @@ function standings(g){
 /* ---------- 종목별 결과 화면 ---------- */
 let rGrade = 1, rEvent = "tug", editing = false;
 // 관리자 모드: 비밀번호 확인 후에만 결과 입력 버튼이 열림 (이 탭에서만 유지)
-const ADMIN_HASH = "124aec7171598f2fc8a17015f5b370a83736bb08e24a242d4be2f1719e6f6986";
+const ADMIN_HASH = "c7de583c12c8d129a7c27531b02dd5594a642221434773197700ed87ccc90cd2";
 let isAdmin = false, adminFormOpen = false;
 try { isAdmin = sessionStorage.getItem("kd-admin") === "1"; } catch {}
 async function sha256(t){
